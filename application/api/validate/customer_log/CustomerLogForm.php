@@ -1,21 +1,15 @@
 <?php
 
 
-namespace app\api\validate\customer;
+namespace app\api\validate\customer_log;
 
 
 use LinCmsTp5\validate\BaseValidate;
 
-class CustomerForm extends BaseValidate
+class CustomerLogForm extends BaseValidate
 {
     protected $rule = [
-        'name' => 'require',
-        'contacts_name' => 'require',
-        'telephone' => 'require|mobile',
-        'email' => 'require|email',
-        'address' => 'require',
-        'purpose' => 'require',
-        'channel' => 'require'
+        'content' => 'require'
     ];
 
     public function sceneEdit()

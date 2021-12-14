@@ -1,14 +1,14 @@
 <?php
 
 
-namespace app\lib\exception\column;
+namespace app\lib\exception\customer;
 
 
 use LinCmsTp5\exception\BaseException;
 
-class ColumnException extends BaseException
+class CustomerException extends BaseException
 {
     public $code = 400;
-    public $msg  = 'Column通用错误';
+    public $msg  = 'Customer通用错误';
     public $error_code = '51000';
 }

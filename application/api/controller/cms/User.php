@@ -48,7 +48,6 @@ class User
         $user = LinUser::verify($params['username'], $params['password']);
         $token = $this->loginTokenService->getToken($user->toArray());
         Hook::listen('logger', array('uid' => $user->id, 'username' => $user->username, 'msg' => '登陆成功获取了令牌'));
-
         return [
             'access_token' => $token['accessToken'],
             'refresh_token' => $token['refreshToken']

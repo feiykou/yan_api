@@ -6,13 +6,30 @@ namespace app\api\model;
 
 use think\model\concern\SoftDelete;
 
-class Customer extends BaseModel
+class CustomerLog extends BaseModel
 {
     use SoftDelete;
 
     protected $autoWriteTimestamp = 'datetime';
     protected $deleteTime = 'delete_time';
-    protected $json = ['address'];
+    protected $json = ['address', 'img_urls'];
+
+    // 设置spu_detail_img_list多图片链接
+    protected function getImgUrlsAttr($value)
+    {
+        if(!$value) return;
+        return $this->setMultiImgPrefix($value);
+    }
+
+    // 设置spu_detail_img_list多图片链接
+    protected function setImgUrlsAttr(array $value)
+    {
+        return $this->cancelMultiImgPrefix($value);
+    }
+
+    protected function getContentAttr($value) {
+        return rawurldecode($value);
+    }
 
     public function getStatusTextAttr($value,$data)
     {
@@ -45,16 +62,14 @@ class Customer extends BaseModel
     /**
      * 获取所有分页信息
      * @return array
-     * @throws \LinCmsTp5\exception\ParameterException
      */
-    public static function getColumnPaginate($uid='',$status=0)
+    public static function getPaginate($uid='',$status=0)
     {
         $where = [];
-        if($uid) $where['user_id'] = $uid;
-        if(intval($status) == 1) $where['status'] = 1;
+        if($uid) $where['customer_id'] = $uid;
         list($start, $count) = paginate();
         $listData = new self();
-        $totalNums = $listData->count();
+        $totalNums = $listData->where($where)->count();
         $listData = $listData->limit($start, $count)
             ->where($where)
             ->order(['create_time' => 'desc', 'id' => 'desc'])
@@ -71,15 +86,30 @@ class Customer extends BaseModel
     /**
      * 获取详情
      */
-    public static function getCustomerDetail($id,$delfield='')
+    public static function getDetail($id)
     {
         $where = [
             'id' => $id
         ];
         $result = self::where($where)
-            ->hidden([$delfield])
-            ->with(['customerAdd', 'customerMain'])
             ->find();
         return $result;
+    }
+
+
+    /**
+     * 每天跟进客户数统计
+     */
+    public static function getCustomerFollowByDate($params, $format)
+    {
+        $query = [];
+        $query[] = self::betweenTimeQuery('start', 'end', $params);
+        $customer = self::where($query)
+            ->field("DATE_FORMAT(update_time,'{$format}') as date,
+                        customer_id,
+                        count(*) as count")
+            ->group('date,customer_id')
+            ->select();
+        return $customer;
     }
 }

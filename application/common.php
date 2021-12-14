@@ -108,3 +108,23 @@ function paginate()
 
     return [$start, $count];
 }
+
+function fill_date_range($queryStart, $queryEnd, $format, $stepType, $extend = '', $step = 1)
+{
+    $range = [];
+    $rangeStart = strtotime($queryStart);
+    $rangeEnd = strtotime($queryEnd);
+    while ($rangeStart <= $rangeEnd) {
+        // 利用PHP内置函数date()按$format参数格式化时间戳
+        $formattedDate = date($format, $rangeStart);
+        $item = [
+            'date' => $formattedDate,
+            'count' => 0
+        ];
+        if ($extend) $item[$extend] = 0;
+        array_push($range, $item);
+        // 计算
+        $rangeStart = strtotime("+{$step} {$stepType}", $rangeStart);
+    }
+    return $range;
+}

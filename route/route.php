@@ -70,19 +70,95 @@ Route::group('', function () {
         Route::post('file','api/cms.File/postFile');
     });
     Route::group('v1', function () {
-        Route::group('book',function (){
-            // 查询所有图书
-            Route::get('', 'api/v1.Book/getBooks');
-            // 新建图书
-            Route::post('', 'api/v1.Book/create');
-            // 查询指定bid的图书
-            Route::get(':bid', 'api/v1.Book/getBook');
-            // 搜索图书
+        Route::group('customer',function (){
+            // 查询当前管理员所有客户
+            Route::get('', 'api/v1.Customer/getCustomers');
+            // 查询公域池客户
+            Route::get('public/all', 'api/v1.Customer/getPublicCustomers');
+            // 设置公域池客户归属
+            Route::put('public/set', 'api/v1.Customer/setGetCommonCustomer');
+            // 查询所有客户
+            Route::get('all', 'api/v1.Customer/getAllCustomer');
+            // 新建客户
+            Route::post('', 'api/v1.Customer/create');
+            // 查询指定id的客户,并获取审核权限
+            Route::get(':id', 'api/v1.Customer/getCustomer', ['id'=>'\d']);
+            // 查询指定id的客户
+//            Route::get(':id/detail', 'api/v1.Customer/getStatusCustomer', ['id'=>'\d']);
+            // 创建，更新跟进
+            Route::put('follow', 'api/v1.Customer/followUpdate');
+            // 创建，更新跟进
+            Route::put('main', 'api/v1.Customer/MainUpdate');
+            // 更新客户
+            Route::put(':id', 'api/v1.Customer/update', ['id'=>'\d']);
+            // 删除客户
+            Route::delete('', 'api/v1.Customer/delete');
+        });
+        Route::group('customer_log',function (){
+            // 查询所有客户日志
+            Route::get('', 'api/v1.CustomerLog/getAllCustomer');
+            // 新建客户日志
+            Route::post('', 'api/v1.CustomerLog/create');
+            // 查询指定id的客户日志,并获取审核权限
+            Route::get(':id', 'api/v1.CustomerLog/getCustomer', ['id'=>'\d']);
+            // 更新客户日志
+            Route::put(':id', 'api/v1.CustomerLog/update', ['id'=>'\d']);
+            // 删除客户日志
+            Route::delete('', 'api/v1.CustomerLog/delete');
+        });
+        Route::group('customer_report',function (){
+            // 查询当前管理员所有客户
+            Route::get('', 'api/v1.CustomerReport/getlists');
+            // 查询所有客户
+            Route::get('all', 'api/v1.CustomerReport/getAll');
+            // 新建客户
+            Route::post('', 'api/v1.CustomerReport/create');
+            // 查询指定id的客户,并获取审核权限
+            Route::get(':id', 'api/v1.CustomerReport/getDetail', ['id'=>'\d']);
+            // 查询指定id的客户
+            Route::get(':id/detail', 'api/v1.CustomerReport/getStatusDetail', ['id'=>'\d']);
+            // 更新客户
+            Route::put(':id', 'api/v1.CustomerReport/update', ['id'=>'\d']);
+            // 删除客户
+            Route::delete('', 'api/v1.CustomerReport/delete');
+        });
+        Route::group('spec', function (){
+            // 查询所有轮播图信息
+            Route::get('', 'api/v1.Spec/getSpecs');
+            // 查询指定id的轮播图信息
+            Route::get(':id', 'api/v1.Spec/getSpec');
+            // 新建轮播图信息
+            Route::post('', 'api/v1.Spec/create');
+            // 更新轮播图信息
+            Route::put(':id', 'api/v1.Spec/update');
+            // 删除轮播图信息
+            Route::delete('', 'api/v1.Spec/delSpec');
+            // 获取轮播图元素信息
+            Route::get('item/:id', 'api/v1.Spec/getItem');
+            // 新建轮播图元素信息
+            Route::post('item', 'api/v1.Spec/itemCreate');
+            // 更新轮播图元素信息
+            Route::put('item/:id', 'api/v1.Spec/itemUpdate');
+            // 删除轮播图元素信息
+            Route::delete('item', 'api/v1.Spec/delItem');
+        });
+        Route::group('excel',function (){
+            // 查询当前管理员所有客户
+            Route::post('customer_log', 'api/v1.ExcelCustomer/importCustomerLog');
+            Route::post('customer', 'api/v1.ExcelCustomer/importCustomer');
+        });
+        // 数据分析接口
+        Route::group('analysis', function () {
+            // 时间范围统计订单数据
+            Route::get('customer/channel', 'api/v1.Statistics/getCustomerChannelData');
+            // 时间范围统计新增会员数
+            Route::get('customer/base', 'api/v1.Statistics/getCustomerBaseStatistics');
+            // 未跟进客户数统计
+            Route::get('customer/no_follow', 'api/v1.Statistics/getCustomerNoFollow');
+            // 跟进客户数统计
+            Route::get('customer/follow', 'api/v1.Statistics/getCustomerFollowByDate');
 
-            // 更新图书
-            Route::put(':bid', 'api/v1.Book/update');
-            // 删除图书
-            Route::delete(':bid', 'api/v1.Book/delete');
+
         });
 
     });

@@ -9,15 +9,22 @@ use LinCmsTp5\validate\BaseValidate;
 class CustomerForm extends BaseValidate
 {
     protected $rule = [
-        'title' => 'require',
-        'img' => 'require',
-        'online' => 'boolean',
-        'top_resc' => 'boolean',
-        'order' => 'number'
+        'name' => 'require',
+        'contacts_name' => 'require',
+        'telephone' => 'require|mobile',
+        'email' => 'require|email',
+        'address' => 'require',
+        'purpose' => 'require',
+        'channel' => 'require'
     ];
 
     public function sceneEdit()
     {
         return $this->append('id', 'require|number');
+    }
+
+    public function sceneFilter()
+    {
+
     }
 }

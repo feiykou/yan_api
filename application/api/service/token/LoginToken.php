@@ -148,7 +148,6 @@ class LoginToken
     public function getTokenFromHeaders(): string
     {
         $authorization = Request::header('authorization');
-
         if (!$authorization) {
             throw new TokenException(['msg' => '请求未携带Authorization信息', 'error_code' => 10000]);
         }

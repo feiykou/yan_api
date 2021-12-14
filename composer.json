@@ -23,7 +23,8 @@
     "lin-cms-tp5/admin-core": "dev-master",
     "lin-cms-tp/validate-core": "dev-master",
     "lin-cms-tp/utils-core": "dev-master",
-    "qinchen/web-utils": ">=0.0.1"
+    "qinchen/web-utils": ">=0.0.1",
+    "phpoffice/phpspreadsheet": "^1.19"
   },
   "autoload": {
     "psr-4": {

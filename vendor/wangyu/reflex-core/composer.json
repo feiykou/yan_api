@@ -1,0 +1,19 @@
+{
+  "name": "wangyu/reflex-core",
+  "description": "原生PHP的反射注释模型,composer扩展",
+  "authors": [
+    {
+      "name": "wangyu",
+      "email": "china_wangyu@aliyun.com"
+    }
+  ],
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "WangYu\\": "src"
+    }
+  },
+  "require": {
+    "php": ">=7.1.0"
+  }
+}

@@ -6,7 +6,7 @@ namespace app\api\model;
 
 use think\model\concern\SoftDelete;
 
-class CustomerFollow extends BaseModel
+class CustomerAdd extends BaseModel
 {
     use SoftDelete;
 
