@@ -23,15 +23,6 @@ class Customer extends BaseModel
     }
 
     /**
-     * 一对一
-     * @return \think\model\relation\HasOne
-     */
-    public function customerAdd()
-    {
-        return $this->hasOne('customer_add', 'link_code', 'link_code');
-    }
-
-    /**
      * 客户日志一对多
      * @return \think\model\relation\HasMany
      */
@@ -103,7 +94,7 @@ class Customer extends BaseModel
         ];
         $result = self::where($where)
             ->hidden([$delfield])
-            ->with(['customerAdd', 'customerMain'])
+            ->with(['customerMain'])
             ->find();
         return $result;
     }

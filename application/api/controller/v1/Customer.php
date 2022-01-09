@@ -238,7 +238,7 @@ class Customer extends Base
     }
 
     /**
-     * 获取Customer详情
+     * 公域池抢单设置信息
      * @param('cutomer_id','customer的id','require|number')
      * @url v1/customer/common_set/:cutomer_id
      * @http GET
@@ -248,7 +248,7 @@ class Customer extends Base
     {
         $params = $this->setAuthor();
         // 释放客户回归正常状态
-        $params['is_release_user'] = 1;
+        $params['is_release_user'] = 0;
         $result = CustomerModel::where(['id'=>$cutomer_id])->update($params);
         if (!$result) {
             throw new CustomerException([
@@ -259,10 +259,45 @@ class Customer extends Base
         return writeJson(201, [], '获取成功');
     }
 
+    /**
+     * 释放客户进去公域池（支持多选）
+     * @param('ids','待释放的customer_id列表','require|array|min:1')
+     */
+    public function releaseCustomers()
+    {
+        $ids = Request::put('ids');
+        $token = LoginToken::getInstance();
+        $arr = [];
+        foreach ($ids as $id) {
+            $arr[] = [
+                'id' => $id,
+                'old_author' => $token->getCurrentUserName(),
+                'old_user_id' => $token->getCurrentUID(),
+                'author' => '',
+                'user_id' => 0
+            ];
+        }
+        if(count($arr) > 0) {
+            $result = (new CustomerModel)->isUpdate()->saveAll($arr);
+            if (!$result) {
+                throw new CustomerException([
+                    'msg' => '释放进公域池失败',
+                    'error_code' => '51004'
+                ]);
+            }
+            return writeJson(201, [], '释放进公域池成功');
+        }
+        throw new CustomerException([
+            'msg' => '请先选择客户',
+            'error_code' => '51004'
+        ]);
+    }
+
     // 设置进入公域池
     private function setAuthor($params=[])
     {
         $token = LoginToken::getInstance();
+        // 主动指定把客户分配给谁
         if(isset($params['dicider_user']) && !empty($params['dicider_user'])) {
             if($token->getCurrentUID() == $params['user_id']) {
                 $params['old_author'] = $token->getCurrentUserName();
@@ -273,12 +308,14 @@ class Customer extends Base
             unset($params['dicider_user']);
             return $params;
         }
-        if(array_key_exists('is_release_user', $params) && $params['is_release_user'] == 0){
+        // 释放客户
+        if(array_key_exists('is_release_user', $params) && $params['is_release_user'] == 1){
             $params['old_author'] = $token->getCurrentUserName();
             $params['old_user_id'] = $token->getCurrentUID();
             $params['author'] = '';
             $params['user_id'] = 0;
         } else {
+            // 设置当前写入客户的id
             $params['author'] = $token->getCurrentUserName();
             $params['user_id'] = $token->getCurrentUID();
         }

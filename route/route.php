@@ -77,6 +77,8 @@ Route::group('', function () {
             Route::get('public/all', 'api/v1.Customer/getPublicCustomers');
             // 设置公域池客户归属
             Route::put('public/set', 'api/v1.Customer/setGetCommonCustomer');
+            // 释放进入公域池
+            Route::put('public/release', 'api/v1.Customer/releaseCustomers');
             // 查询所有客户
             Route::get('all', 'api/v1.Customer/getAllCustomer');
             // 新建客户
@@ -106,6 +108,20 @@ Route::group('', function () {
             // 删除客户日志
             Route::delete('', 'api/v1.CustomerLog/delete');
         });
+        Route::group('customer_project',function (){
+            // 查询指定项目信息
+            Route::get('', 'api/v1.CustomerProject/getCustomerProjects');
+            // 查询所有项目信息
+            Route::get('all', 'api/v1.CustomerProject/getAllCustomerProjects');
+            // 查询指定id的项目信息
+            Route::get(':id', 'api/v1.CustomerProject/getCustomerProject', ['id'=>'\d']);
+            // 新建项目信息
+            Route::post('', 'api/v1.CustomerProject/create');
+            // 更新项目信息
+            Route::put(':id', 'api/v1.CustomerProject/update', ['id'=>'\d']);
+            // 删除项目信息
+            Route::delete('', 'api/v1.CustomerProject/delete');
+        });
         Route::group('customer_report',function (){
             // 查询当前管理员所有客户
             Route::get('', 'api/v1.CustomerReport/getlists');
@@ -121,6 +137,21 @@ Route::group('', function () {
             Route::put(':id', 'api/v1.CustomerReport/update', ['id'=>'\d']);
             // 删除客户
             Route::delete('', 'api/v1.CustomerReport/delete');
+        });
+        Route::group('type', function (){
+            // 查询所有类型信息
+            Route::get('', 'api/v1.Type/getTypes');
+            // 通过字段获取类型值
+            Route::get('field', 'api/v1.Type/getFieldValue');
+            // 查询指定id的类型信息
+            Route::get(':id', 'api/v1.Type/getType', ['id'=>'\d']);
+            // 新建类型信息
+            Route::post('', 'api/v1.Type/create');
+            // 更新类型信息
+            Route::put(':id', 'api/v1.Type/update');
+            // 删除类型信息
+            Route::delete('', 'api/v1.Type/delType');
+
         });
         Route::group('spec', function (){
             // 查询所有轮播图信息

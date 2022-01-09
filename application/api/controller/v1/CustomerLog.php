@@ -49,7 +49,7 @@ class CustomerLog extends Base
 
     /**
      * 创建信息
-     * @validate('CustomerLogForm')
+     * @validate('TypeForm')
      * @return \think\response\Json
      * @throws CustomerException
      */
@@ -78,7 +78,7 @@ class CustomerLog extends Base
 
     /**
      * 更新信息
-     * @validate('CustomerLogForm.edit')
+     * @validate('TypeForm.edit')
      * @return \think\response\Json
      */
     public function update()

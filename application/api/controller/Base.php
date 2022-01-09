@@ -13,7 +13,7 @@ class Base
      * 生成客户编码
      * @return string
      */
-    protected function makeCustomerCode()
+    public function makeCustomerCode()
     {
         $codeSn =
             str_replace('20','',intval(date('Y'))) . date('m') . sprintf(
@@ -27,7 +27,7 @@ class Base
      * 生成客户编码
      * @return string
      */
-    protected function makeLinkIndex()
+    public function makeLinkIndex()
     {
         $token = LoginToken::getInstance();
         $user_id = $token->getCurrentUID();

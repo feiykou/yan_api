@@ -128,3 +128,8 @@ function fill_date_range($queryStart, $queryEnd, $format, $stepType, $extend = '
     }
     return $range;
 }
+
+function getArrKey($field = '')
+{
+    return $field;
+}
