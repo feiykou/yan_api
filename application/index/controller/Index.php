@@ -17,6 +17,7 @@ class Index
      */
     public function index()
     {
+        phpinfo();
         return response('<style type="text/css">*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} a{color:#2E5CD5;cursor: 
     pointer;text-decoration: none} a:hover{text-decoration:underline; } body{ background: #fff; font-family: 
     "Century Gothic","Microsoft yahei"; color: #333;font-size:18px;} h1{ font-size: 100px; font-weight: normal; 
