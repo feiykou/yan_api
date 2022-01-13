@@ -189,6 +189,7 @@ class ExcelCustomer
                 ]);
             }
         }
+        return [];
         var_dump(1);
         // 建立excel对象
         $obj = $objRead->load($file);
