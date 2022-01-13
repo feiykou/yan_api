@@ -189,8 +189,10 @@ class ExcelCustomer
                 ]);
             }
         }
+        var_dump(1);
         // 建立excel对象
         $obj = $objRead->load($file);
+        var_dump($obj);
         // 获取指定的sheet表
         $currSheet = $obj->getSheet(0);
         /* 取得最大的列号 */
@@ -241,6 +243,7 @@ class ExcelCustomer
                 unset($data[$_row]);
             }
         }
+        var_dump($data);
         return $data;
     }
 
