@@ -25,12 +25,11 @@ class ExcelCustomer extends Base
         try{
             $result = ExcelCustomerService::setImportData();
         } catch (Exception $e){
-            var_dump($e);
             throw new ExcelCustomerException([
                 'msg' => $e->getMessage()
             ]);
         }
-        return [];
+        return $result;
         Db::startTrans();
         try{
             $c1 = (new Customer())->insertAll($result['customer']);

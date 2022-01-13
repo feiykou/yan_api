@@ -193,8 +193,9 @@ class ExcelCustomer
 
         // 建立excel对象
         $obj = $objRead->load($file);
-        return false;
         var_dump($obj);
+        return false;
+
         // 获取指定的sheet表
         $currSheet = $obj->getSheet(0);
         /* 取得最大的列号 */
