@@ -189,10 +189,11 @@ class ExcelCustomer
                 ]);
             }
         }
-        return false;
-        var_dump(1);
+
+
         // 建立excel对象
         $obj = $objRead->load($file);
+        return false;
         var_dump($obj);
         // 获取指定的sheet表
         $currSheet = $obj->getSheet(0);
