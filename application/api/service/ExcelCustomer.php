@@ -192,7 +192,7 @@ class ExcelCustomer
 
         // 建立excel对象
         // 加载速度很慢或者超时的时候，用这个
-        $objRead->setReadDataOnly(true);
+        $objRead->setReadDataOnly(TRUE);
         $obj = $objRead->load($file);
         // 获取指定的sheet表
         $currSheet = $obj->getSheet(0);
