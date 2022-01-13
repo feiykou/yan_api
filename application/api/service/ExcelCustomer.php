@@ -192,10 +192,11 @@ class ExcelCustomer
 
 
         // 建立excel对象
-        var_dump($file);
+        var_dump($objRead);
+        return false;
         $obj = $objRead->load($file);
         var_dump($obj);
-        return false;
+
 
 
         // 获取指定的sheet表
