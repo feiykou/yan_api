@@ -193,13 +193,9 @@ class ExcelCustomer
 
         // 建立excel对象
         var_dump($file);
-        try {
-            $obj = $objRead->load($file);
-        } catch (Exception $e) {
-            var_dump($e);
-        }
-        return false;
+        $obj = $objRead->load($file);
         var_dump($obj);
+        return false;
 
 
         // 获取指定的sheet表
