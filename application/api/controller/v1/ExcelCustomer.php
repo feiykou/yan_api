@@ -30,6 +30,7 @@ class ExcelCustomer extends Base
                 'msg' => $e->getMessage()
             ]);
         }
+        return [];
         Db::startTrans();
         try{
             $c1 = (new Customer())->insertAll($result['customer']);
