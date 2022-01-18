@@ -33,7 +33,9 @@ class ExcelCustomer
             $insertData[$key]['follow_status'] = $datum['A'];
             // 咨询日期
             var_dump($datum['B']);
-            var_dump(date_format($datum['B'],"Y年m月d日"));
+            $date=date_create($datum['B']);
+            var_dump($date);
+            var_dump(date_format($date,"Y年m月d日"));
             $datum['B'] = str_replace('/','-', $datum['B']);
             var_dump($datum['B']);
             var_dump(strtotime($datum['B']));
