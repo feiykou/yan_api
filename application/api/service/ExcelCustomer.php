@@ -248,7 +248,6 @@ class ExcelCustomer
                 unset($data[$_row]);
             }
         }
-        var_dump($data);
         return $data;
     }
 
