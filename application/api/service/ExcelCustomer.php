@@ -25,6 +25,7 @@ class ExcelCustomer
         $insertData = [];
         $followData = [];
         $mainData = [];
+        var_dump($data);
         foreach ($data as $key => $datum) {
             $linkIndex = $base->makeLinkIndex();
             // 连接编码
