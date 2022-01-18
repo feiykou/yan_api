@@ -33,12 +33,8 @@ class ExcelCustomer
             // 跟进状态
             $insertData[$key]['follow_status'] = $datum['A'];
             // 咨询日期
-            $date=var_dump(DateFormatter::format($datum['B'],'YYYY-m-d'));
-            var_dump($date);
-            $datum['B'] = str_replace('/','-', $datum['B']);
-            var_dump($datum['B']);
-            var_dump(strtotime($datum['B']));
-            $insertData[$key]['create_time'] = date('Y-m-d',strtotime($datum['B']));
+            $datum['B'] = DateFormatter::format($datum['B'],'YYYY-m-d');
+            $insertData[$key]['create_time'] = $datum['B'];
             // 跟进业务员名和业务员id
             $token = LoginToken::getInstance();
             $author = $datum['C'] | $token->getCurrentUserName();
