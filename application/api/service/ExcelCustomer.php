@@ -26,8 +26,6 @@ class ExcelCustomer
         $insertData = [];
         $followData = [];
         $mainData = [];
-        var_dump($data);
-
         foreach ($data as $key => $datum) {
             $linkIndex = $base->makeLinkIndex();
             // 连接编码
@@ -35,10 +33,8 @@ class ExcelCustomer
             // 跟进状态
             $insertData[$key]['follow_status'] = $datum['A'];
             // 咨询日期
-            var_dump($datum['B']);
-            $date=var_dump(DateFormatter::format($datum['B'],'Y-m-d'));
+            $date=var_dump(DateFormatter::format($datum['B'],'YYYY-m-d'));
             var_dump($date);
-            var_dump(date_format($date,"Y年m月d日"));
             $datum['B'] = str_replace('/','-', $datum['B']);
             var_dump($datum['B']);
             var_dump(strtotime($datum['B']));
