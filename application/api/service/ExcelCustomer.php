@@ -178,10 +178,10 @@ class ExcelCustomer
             ]);
         }
 //      创建 Xlsx $objRead
-        $r =PHPExcel_CachedObjectStorageFactory::initialize(PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp);
-        if (!$r) {
-            die('Unable to set cell cacheing');
-        }
+//        $r =PHPExcel_CachedObjectStorageFactory::initialize(PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp);
+//        if (!$r) {
+//            die('Unable to set cell cacheing');
+//        }
         $objRead = IOFactory::createReader('Xlsx');
         if (!$objRead->canRead($file)) {
             // 创建 Xls $objRead
