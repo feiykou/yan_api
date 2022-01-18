@@ -10,6 +10,7 @@ use LinCmsTp5\admin\model\LinUser;
 use LinCmsTp5\exception\BaseException;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat\DateFormatter;
 use think\Exception;
 use think\facade\Env;
 
@@ -26,6 +27,7 @@ class ExcelCustomer
         $followData = [];
         $mainData = [];
         var_dump($data);
+
         foreach ($data as $key => $datum) {
             $linkIndex = $base->makeLinkIndex();
             // 连接编码
@@ -34,7 +36,7 @@ class ExcelCustomer
             $insertData[$key]['follow_status'] = $datum['A'];
             // 咨询日期
             var_dump($datum['B']);
-            $date=date_create($datum['B']);
+            $date=var_dump(DateFormatter::format($datum['B'],'Y-m-d'));
             var_dump($date);
             var_dump(date_format($date,"Y年m月d日"));
             $datum['B'] = str_replace('/','-', $datum['B']);
