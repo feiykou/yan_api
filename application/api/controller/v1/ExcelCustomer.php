@@ -28,7 +28,9 @@ class ExcelCustomer extends Base
             throw new ExcelCustomerException([
                 'msg' => $e->getMessage()
             ]);
+            var_dump(1);
         }
+        var_dump(2);
         Db::startTrans();
         try{
             $c1 = (new Customer())->insertAll($result['customer']);
