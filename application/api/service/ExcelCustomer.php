@@ -468,16 +468,16 @@ class ExcelCustomer
 //                header('Cache-Control: max-age=0');//禁止缓存
 
                 // 2
-                header('Content-Type: application/vnd.ms-excel;charset=UTF-8');
-                header('content-type:application/octet-stream');
-                header('Cache-Control: max-age=0');
-                header("Content-Type:application/force-download");
-                header("Content-Type:application/download");
-                header('Content-Disposition: attachment;filename="' . $fileName . '.xlsx"');
+//                header('Content-Type: application/vnd.ms-excel;charset=UTF-8');
+//                header('content-type:application/octet-stream');
+//                header('Cache-Control: max-age=0');
+//                header("Content-Type:application/force-download");
+//                header("Content-Type:application/download");
+//                header('Content-Disposition: attachment;filename="' . $fileName . '.xlsx"');
 
-//                header('pragma:public');
-//                header('Content-type:application/vnd.ms-excel;charset=utf-8;');
-//                header("Content-Disposition:attachment;filename=$fileName.xls");
+                header('pragma:public');
+                header('Content-type:application/vnd.ms-excel;charset=utf-8;');
+                header("Content-Disposition:attachment;filename=$fileName.xls");
                 $savePath = 'php://output';
             } else {
                 $savePath = $options['savePath'];
