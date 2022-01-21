@@ -475,10 +475,11 @@ class ExcelCustomer
 //                header("Content-Type:application/download");
 //                header('Content-Disposition: attachment;filename="' . $fileName . '.xlsx"');
 
-                header('pragma:public');
-                header('Content-type:application/vnd.ms-excel;charset=utf-8;');
+
+                header('Content-type:application/vnd.ms-excel;charset=utf-8;name=客户信息模板.xls');
                 header("Content-Disposition:attachment;filename=$fileName.xls");
                 header('Cache-Control: max-age=0');
+                header('pragma:public');
                 $savePath = 'php://output';
             } else {
                 $savePath = $options['savePath'];
@@ -486,7 +487,7 @@ class ExcelCustomer
 
             ob_clean();
             ob_start();
-            $objWriter = IOFactory::createWriter($objSpreadsheet, 'Xlsx');
+            $objWriter = IOFactory::createWriter($objSpreadsheet, 'Xls');
             // php://output可以直接导出xlsx文件，并且不会在服务器上生成xlsx文件
             $objWriter->save($savePath);
             /* 释放内存 */
