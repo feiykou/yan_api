@@ -456,24 +456,24 @@ class ExcelCustomer
             if (!isset($options['savePath'])) {
                 /* 直接导出Excel，无需保存到本地，输出07Excel文件 */
                 // 输出xlsx格式的文件  1
-                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8');
-                //告诉浏览器输出文件的名称
-                header(
-                    "Content-Disposition:attachment;filename=" . iconv(
-                        "utf-8", "GBK", $fileName
-//                        "utf-8", "GB2312//TRANSLIT", $fileName
-                    )
-                );
-                // If you're serving to IE 9, then the following may be needed
-                header('Cache-Control: max-age=0');//禁止缓存
+//                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8');
+//                //告诉浏览器输出文件的名称
+//                header(
+//                    "Content-Disposition:attachment;filename=" . iconv(
+//                        "utf-8", "GBK", $fileName
+////                        "utf-8", "GB2312//TRANSLIT", $fileName
+//                    )
+//                );
+//                // If you're serving to IE 9, then the following may be needed
+//                header('Cache-Control: max-age=0');//禁止缓存
 
                 // 2
-//                header('Content-Type: application/vnd.ms-excel;charset=UTF-8');
-//                header('content-type:application/octet-stream');
-//                header('Cache-Control: max-age=0');
-//                header("Content-Type:application/force-download");
-//                header("Content-Type:application/download");
-//                header('Content-Disposition: attachment;filename="' . $fileName . '.xlsx"');
+                header('Content-Type: application/vnd.ms-excel;charset=UTF-8');
+                header('content-type:application/octet-stream');
+                header('Cache-Control: max-age=0');
+                header("Content-Type:application/force-download");
+                header("Content-Type:application/download");
+                header('Content-Disposition: attachment;filename="' . $fileName . '.xlsx"');
 
 //                header('pragma:public');
 //                header('Content-type:application/vnd.ms-excel;charset=utf-8;');
