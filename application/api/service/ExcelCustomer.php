@@ -476,7 +476,7 @@ class ExcelCustomer
 //                header('Content-Disposition: attachment;filename="' . $fileName . '.xlsx"');
 
 
-                header('Content-type:application/vnd.ms-excel;charset=utf-8;name=客户信息模板.xls');
+                header('Content-type:application/vnd.ms-excel;charset=utf-8;');
                 header("Content-Disposition:attachment;filename=$fileName.xls");
                 header('Cache-Control: max-age=0');
                 header('pragma:public');
