@@ -486,10 +486,8 @@ class ExcelCustomer
             ob_clean();
             ob_start();
             $objWriter = IOFactory::createWriter($objSpreadsheet, 'Xlsx');
-
             // php://output可以直接导出xlsx文件，并且不会在服务器上生成xlsx文件
             $objWriter->save($savePath);
-            return false;
             /* 释放内存 */
             $objSpreadsheet->disconnectWorksheets();
             unset($objSpreadsheet);
