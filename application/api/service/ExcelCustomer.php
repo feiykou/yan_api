@@ -482,6 +482,7 @@ class ExcelCustomer
             } else {
                 $savePath = $options['savePath'];
             }
+            return true;
 
             ob_clean();
             ob_start();
@@ -489,7 +490,6 @@ class ExcelCustomer
             $objWriter = IOFactory::createWriter($objSpreadsheet, 'Xlsx');
             // php://output可以直接导出xlsx文件，并且不会在服务器上生成xlsx文件
             $objWriter->save($savePath);
-            return true;
             /* 释放内存 */
             $objSpreadsheet->disconnectWorksheets();
             unset($objSpreadsheet);
