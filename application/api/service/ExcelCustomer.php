@@ -482,7 +482,7 @@ class ExcelCustomer
             } else {
                 $savePath = $options['savePath'];
             }
-
+            return;
             ob_clean();
             ob_start();
 //            $objSpreadsheet->setOut
