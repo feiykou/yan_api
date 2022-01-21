@@ -478,6 +478,7 @@ class ExcelCustomer
                 header('pragma:public');
                 header('Content-type:application/vnd.ms-excel;charset=utf-8;');
                 header("Content-Disposition:attachment;filename=$fileName.xls");
+                header('Cache-Control: max-age=0');
                 $savePath = 'php://output';
             } else {
                 $savePath = $options['savePath'];
