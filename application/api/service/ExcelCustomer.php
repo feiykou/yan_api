@@ -482,10 +482,11 @@ class ExcelCustomer
             } else {
                 $savePath = $options['savePath'];
             }
-            return true;
 
             ob_clean();
             ob_start();
+            try {
+
 //            $objSpreadsheet->setOut
             $objWriter = IOFactory::createWriter($objSpreadsheet, 'Xlsx');
             // php://output可以直接导出xlsx文件，并且不会在服务器上生成xlsx文件
@@ -495,6 +496,9 @@ class ExcelCustomer
             unset($objSpreadsheet);
             ob_end_flush();
 
+            }catch (Exception $e) {
+                var_dump($e);
+            }
             return true;
         } catch (Exception $e) {
             return false;
