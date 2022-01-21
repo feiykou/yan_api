@@ -41,6 +41,16 @@ class Customer extends BaseModel
     }
 
     /**
+     * 一对一
+     * @return \think\model\relation\HasOne
+     */
+    public function customerProject()
+    {
+        return $this->hasMany('customer_project', 'link_code', 'link_code');
+    }
+
+
+    /**
      * 获取所有分页信息
      * @return array
      * @throws \LinCmsTp5\exception\ParameterException
@@ -199,7 +209,14 @@ class Customer extends BaseModel
     public static function totalCustomerNum()
     {
         $titalNum = self::field("count(*) as count")->select();
+    }
 
+    public static function getCustomerAndProject($ids=[])
+    {
+        $result = self::with(['customerMain', 'customerProject'])
+            ->order('id', 'desc')
+            ->all($ids);
+        return $result;
     }
 
 }

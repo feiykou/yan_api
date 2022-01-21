@@ -177,6 +177,7 @@ Route::group('', function () {
             // 查询当前管理员所有客户
             Route::post('customer_log', 'api/v1.ExcelCustomer/importCustomerLog');
             Route::post('customer', 'api/v1.ExcelCustomer/importCustomer');
+            Route::get('customer', 'api/v1.ExcelCustomer/exportCustomer');
         });
         // 数据分析接口
         Route::group('analysis', function () {
