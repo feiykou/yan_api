@@ -25,11 +25,21 @@ class CustomerProject extends BaseModel
      * 获取所有分页信息
      * @return array
      */
-    public static function getPaginate($UID='', $customerID='')
+    public static function getPaginate($UID='', $customerID='', $params=[])
     {
-        $where = [];
-        if(isset($customerID) && $customerID && !empty($customerID)) $where['link_code'] = intval($customerID);
-        if(isset($UID) && $UID && !empty($UID)) $where['user_id'] = $UID;
+        $field = ['name', 'follow_status', 'author'];
+        $where = self::equalQuery($field, $params);
+        $where[] = self::betweenTimeQuery('start', 'end', $params);
+        if(!empty($where)) {
+            foreach ($where as $key => $val) {
+                if(isset($val) && empty($val)) {
+                    unset($where[$key]);
+                }
+            }
+        }
+        if(empty($where)) $where = [];
+        if(isset($customerID) && $customerID && !empty($customerID)) $where[] = ['link_code','=',intval($customerID)];
+        if(isset($UID) && $UID && !empty($UID)) $where[] = ['user_id', '=', $UID];
         list($start, $count) = paginate();
         $listData = new self();
         $totalNums = $listData->where($where)->count();

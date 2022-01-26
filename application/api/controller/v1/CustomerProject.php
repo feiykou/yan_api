@@ -45,17 +45,20 @@ class CustomerProject extends Base
 
     /**
      * 获取全部客户项目信息
+     * @validate('CustomerProjectFilter')
      * @auth('全部项目信息','客户项目管理')
      */
     public function getAllCustomerProjects()
     {
-        $result = CustomerProjectModel::getPaginate();
+        $params = Request::get();
+        $result = CustomerProjectModel::getPaginate($params);
         return $result;
     }
 
     /**
      * 获取当前管理员的
      * @param('customer_id','管理员id','number')
+     * @validate('CustomerProjectFilter')
      * @param $customer_id 客户id
      * @param bool $isAdmin  0: 没有管理员的条件   1：查询管理员
      */
@@ -67,7 +70,8 @@ class CustomerProject extends Base
             $token = LoginToken::getInstance();
             $UID = $token->getCurrentUID();
         }
-        $result = CustomerProjectModel::getPaginate($UID, $customer_id);
+        $params = Request::get();
+        $result = CustomerProjectModel::getPaginate($UID, $customer_id, $params);
         return $result;
     }
 

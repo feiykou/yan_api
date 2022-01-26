@@ -474,8 +474,6 @@ class ExcelCustomer
 //                header("Content-Type:application/force-download");
 //                header("Content-Type:application/download");
 //                header('Content-Disposition: attachment;filename="' . $fileName . '.xlsx"');
-
-
                 header('Content-type:application/vnd.ms-excel;charset=utf-8;');
                 header("Content-Disposition:attachment;filename=$fileName.xls");
                 header('Cache-Control: max-age=0');

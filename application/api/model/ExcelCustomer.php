@@ -120,7 +120,6 @@ class ExcelCustomer
                 else {
                     $cacheData[$curKey] = $let == 'null' ? '' : $val[$let];
                 }
-
             }
             $proJect_index ++;
             $excel_index = $proJect_index;
