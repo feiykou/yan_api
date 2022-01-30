@@ -86,6 +86,24 @@ class Customer extends Base
         return $result;
     }
 
+    /**
+     * 通过连接代码获得单个客户信息
+     * @param('link_code','customer的link_code','require|number')
+     * @param int $linkcode 链接编码
+     */
+    public function getCustomerByLinkcode($link_code=0)
+    {
+        $result = CustomerModel::where('link_code', $link_code)
+            ->find();
+        if (!$result) {
+            throw new CustomerException([
+                'msg' => '客户信息不存在',
+                'error_code' => '51004'
+            ]);
+        }
+        return $result;
+    }
+
 
     /**
      * 获取Customer详情
@@ -338,4 +356,6 @@ class Customer extends Base
             ]);
         }
     }
+
+
 }

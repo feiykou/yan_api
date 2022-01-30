@@ -219,4 +219,15 @@ class Customer extends BaseModel
         return $result;
     }
 
+    /**
+     * 根据日志跟进状态更新客户状态
+     */
+    public static function updateCustomerStatus($customer_id, $status='')
+    {
+        $result = self::where(['id'=>$customer_id])->update([
+            'follow_status' => $status
+        ]);
+        return $result;
+    }
+
 }

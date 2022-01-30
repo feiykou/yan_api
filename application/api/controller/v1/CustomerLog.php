@@ -38,12 +38,12 @@ class CustomerLog extends Base
 
     /**
      * 获取全部客户日志信息
-     * @param user_id  客户id
+     * @param customer_id  客户id
      * @auth('获取全部客户日志信息','客户日志管理')
      */
     public function getAllCustomer() {
         $params = Request::get();
-        $result = CustomerLogModel::getPaginate($params['user_id']);
+        $result = CustomerLogModel::getPaginate($params);
         return $result;
     }
 
@@ -61,8 +61,8 @@ class CustomerLog extends Base
             $params['author'] = $token->getCurrentUserName();
             $params['user_id'] = $token->getCurrentUID();
         }
+        Db::startTrans();
         $result = CustomerLogModel::create($params, true);
-
         if (!$result) {
             throw new CustomerLogException([
                 'msg' => '创建失败',
@@ -72,6 +72,7 @@ class CustomerLog extends Base
         // 更新跟进时间
         if( isset($params['customer_id']) && $params['customer_id']) {
             CustomerModel::updateFollowTime($params['customer_id']);
+            CustomerModel::updateCustomerStatus($params['customer_id'], $params['status']);
         }
         return writeJson(201, [], '新增成功');
     }
@@ -84,7 +85,13 @@ class CustomerLog extends Base
     public function update()
     {
         $params = Request::put();
-        $result = CustomerLogModel::update($params, [], true);
+        try {
+            $result = CustomerLogModel::update($params, [], true);
+            CustomerModel::updateCustomerStatus($params['customer_id'], $params['status']);
+            Db::commit();
+        }catch (Exception $e) {
+            Db::rollback();
+        }
         if (!$result) {
             throw new CustomerLogException([
                 'msg' => '更新失败',
@@ -93,7 +100,8 @@ class CustomerLog extends Base
         }
         // 更新跟进时间
         if( isset($params['customer_id']) && $params['customer_id']) {
-            $followResult = CustomerModel::updateFollowTime($params['customer_id']);
+            CustomerModel::updateFollowTime($params['customer_id']);
+            CustomerModel::updateCustomerStatus($params['customer_id'], $params['status']);
         }
         return writeJson(201, [], '更新成功');
     }

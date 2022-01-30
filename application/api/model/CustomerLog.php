@@ -63,10 +63,18 @@ class CustomerLog extends BaseModel
      * 获取所有分页信息
      * @return array
      */
-    public static function getPaginate($uid='',$status=0)
+    public static function getPaginate($params='',$status=0)
     {
         $where = [];
-        if($uid) $where['customer_id'] = $uid;
+        // 如果customer_id和project_id都不存在，则获取日志失败
+        if(!isset($params['customer_id']) && !isset($params['project_id'])) return [
+            // 查询结果
+            'collection' => [],
+            // 总记录数
+            'total_nums' => 0
+        ];
+        if(isset($params['customer_id']) && !empty($params['customer_id'])) $where['customer_id'] = $params['customer_id'];
+        if(isset($params['project_id']) && !empty($params['project_id'])) $where['project_id'] = $params['project_id'];
         list($start, $count) = paginate();
         $listData = new self();
         $totalNums = $listData->where($where)->count();

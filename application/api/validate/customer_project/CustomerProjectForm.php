@@ -9,6 +9,7 @@ use LinCmsTp5\validate\BaseValidate;
 class CustomerProjectForm extends BaseValidate
 {
     protected $rule = [
+        'name' => 'require',
 //        'content' => 'require'
     ];
 

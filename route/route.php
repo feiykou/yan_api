@@ -95,6 +95,8 @@ Route::group('', function () {
             Route::put(':id', 'api/v1.Customer/update', ['id'=>'\d']);
             // 删除客户
             Route::delete('', 'api/v1.Customer/delete');
+            // 根据link_code获取单个客户信息
+            Route::get('link_code/:link_code', 'api/v1.Customer/getCustomerByLinkcode', ['link_code'=>'\d']);
         });
         Route::group('customer_log',function (){
             // 查询所有客户日志
