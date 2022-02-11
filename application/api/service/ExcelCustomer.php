@@ -67,7 +67,7 @@ class ExcelCustomer
             // 联系人
             $insertData[$key]['contacts_name'] = $datum['H'];
             // 联系方式
-            $insertData[$key]['telephone'] = $datum['I'];
+            $insertData[$key]['telephone'] = trim($datum['I']);
             // 客户类型
             $insertData[$key]['customer_type'] = $datum['J'];
             // 客户名称
