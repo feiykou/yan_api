@@ -61,7 +61,6 @@ class CustomerLog extends Base
             $params['author'] = $token->getCurrentUserName();
             $params['user_id'] = $token->getCurrentUID();
         }
-        Db::startTrans();
         $result = CustomerLogModel::create($params, true);
         if (!$result) {
             throw new CustomerLogException([
