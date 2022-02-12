@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'img_prefix' => 'http://yan.cn/uploads/'
+    'img_prefix' => 'http://api.szfxws.com/uploads/'
 ];
