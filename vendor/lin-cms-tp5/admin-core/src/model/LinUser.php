@@ -40,13 +40,15 @@ class LinUser extends Model
                 'error_code' => 10030
             ]);
         }
-        $user = self::where('email', $params['email'])->find();
-        if ($user) {
-            throw new UserException([
-                'code' => 400,
-                'msg' => '注册邮箱重复，请重新输入',
-                'error_code' => 10030
-            ]);
+        if (isset($params['email']) && !empty($params['email'])) {
+            $user = self::where('email', $params['email'])->find();
+            if ($user) {
+                throw new UserException([
+                    'code' => 400,
+                    'msg' => '注册邮箱重复，请重新输入',
+                    'error_code' => 10030
+                ]);
+            }
         }
         $params['password'] = md5($params['password']);
         $params['admin'] = 1;
@@ -67,7 +69,7 @@ class LinUser extends Model
                 ->field('email')
                 ->find();
 
-            if ($exists) throw  new UserException([
+            if ($exists) throw new UserException([
                 'code' => 400,
                 'msg' => '注册邮箱重复，请重新输入',
                 'error_code' => 10030

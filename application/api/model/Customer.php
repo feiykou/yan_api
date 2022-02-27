@@ -4,6 +4,9 @@
 namespace app\api\model;
 
 
+use think\Db;
+use think\Exception;
+use think\migration\command\migrate\Rollback;
 use think\model\concern\SoftDelete;
 
 class Customer extends BaseModel
@@ -152,6 +155,42 @@ class Customer extends BaseModel
         return $result;
     }
 
+    /**
+     * 抢单时，修改客户和项目管理员
+     */
+    public static function updateUserIDAndProject($customer_id, $param=[])
+    {
+        if(!isset($customer_id) || empty($customer_id)) return false;
+        Db::startTrans();
+        try {
+            $customer = self::field('id,link_code')->get($customer_id);
+            $ids = CustomerProject::where(['link_code'=>$customer['link_code']])
+                ->field('id')
+                ->select()
+                ->toArray();
+            $projectIDs = [];
+            if(count($ids) > 0) {
+                foreach ($ids as $val) {
+                    array_push($projectIDs, [
+                        'id' => $val['id'],
+                        'user_id' => $param['user_id'],
+                        'author' => $param['author']
+                    ]);
+                }
+            }
+            if(count($projectIDs) > 0) {
+                $project = new CustomerProject;
+                $project->saveAll($projectIDs);
+            }
+            $result = self::where('id', $customer_id)->update($param);
+            Db::commit();
+            return $result;
+        } catch (Exception $e) {
+            Db::rollback();
+            return false;
+        }
+    }
+
 
     /**
      * 未跟进客户数
@@ -211,6 +250,12 @@ class Customer extends BaseModel
         $titalNum = self::field("count(*) as count")->select();
     }
 
+    /**
+     * 获取客户信息，客户主信息，客户项目信息
+     * @param array $ids
+     * @return false|\PDOStatement|string|\think\Collection|\think\db\Query[]|\think\model\Collection
+     * @throws \think\Exception\DbException
+     */
     public static function getCustomerAndProject($ids=[])
     {
         $result = self::with(['customerMain', 'customerProject'])

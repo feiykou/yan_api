@@ -59,7 +59,7 @@ class CustomerProject extends Base
      * 获取当前管理员的
      * @param('customer_id','管理员id','number')
      * @validate('CustomerProjectFilter')
-     * @param $customer_id 客户id
+     * @param $customer_id 指的是link_code
      * @param bool $isAdmin  0: 没有管理员的条件   1：查询管理员
      */
     public function getCustomerProjects($customer_id, $isAdmin=1)

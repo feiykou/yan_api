@@ -17,7 +17,7 @@ class Base
     {
         $codeSn =
             str_replace('20','',intval(date('Y'))) . date('m') . sprintf(
-                '%04d', rand(1000, 9999));
+                '%d', rand(1000, 9999));
         return json([
             'code' => $codeSn
         ]);

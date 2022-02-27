@@ -7,6 +7,7 @@ namespace app\api\controller\v1;
 use app\api\controller\Base;
 use app\api\model\CustomerLog as CustomerLogModel;
 use app\api\model\Customer as CustomerModel;
+use app\api\model\CustomerProject as CustomerProjectModel;
 use app\lib\exception\customer_log\CustomerLogException;
 use think\Db;
 use think\Exception;
@@ -72,6 +73,7 @@ class CustomerLog extends Base
         if( isset($params['customer_id']) && $params['customer_id']) {
             CustomerModel::updateFollowTime($params['customer_id']);
             CustomerModel::updateCustomerStatus($params['customer_id'], $params['status']);
+            CustomerProjectModel::updateCustomerProjectStatus($params['project_id'], $params['status']);
         }
         return writeJson(201, [], '新增成功');
     }
@@ -101,6 +103,7 @@ class CustomerLog extends Base
         if( isset($params['customer_id']) && $params['customer_id']) {
             CustomerModel::updateFollowTime($params['customer_id']);
             CustomerModel::updateCustomerStatus($params['customer_id'], $params['status']);
+            CustomerProjectModel::updateCustomerProjectStatus($params['project_id'], $params['status']);
         }
         return writeJson(201, [], '更新成功');
     }

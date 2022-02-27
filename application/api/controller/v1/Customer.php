@@ -267,7 +267,7 @@ class Customer extends Base
         $params = $this->setAuthor();
         // 释放客户回归正常状态
         $params['is_release_user'] = 0;
-        $result = CustomerModel::where(['id'=>$cutomer_id])->update($params);
+        $result = customerModel::updateUserIDAndProject($cutomer_id, $params);
         if (!$result) {
             throw new CustomerException([
                 'msg' => '获取失败',

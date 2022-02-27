@@ -15,10 +15,10 @@ class CustomerProject extends BaseModel
 
     public function customer()
     {
-        return $this->hasOne('customer','link_code', 'link_code')
-            ->bind([
-                'customer_name' => 'name'
-            ]);
+        return $this->hasOne('customer','link_code', 'link_code');
+//            ->bind([
+//                'customer_name' => 'name'
+//            ]);
     }
 
     /**
@@ -27,7 +27,7 @@ class CustomerProject extends BaseModel
      */
     public static function getPaginate($UID='', $customerID='', $params=[])
     {
-        $field = ['name', 'follow_status', 'author'];
+        $field = ['name', 'follow_status', 'customer_name'];
         $where = self::equalQuery($field, $params);
         $where[] = self::betweenTimeQuery('start', 'end', $params);
         if(!empty($where)) {
@@ -46,7 +46,6 @@ class CustomerProject extends BaseModel
         $listData = $listData->limit($start, $count)
             ->where($where)
             ->order(['create_time' => 'desc', 'id' => 'desc'])
-            ->with('customer')
             ->select();
         $result = [
             // 查询结果
@@ -68,6 +67,28 @@ class CustomerProject extends BaseModel
         $result = self::where($where)
             ->find();
         return $result;
+    }
+
+    /**
+     * 根据日志跟进状态更新客户项目状态
+     */
+    public static function updateCustomerProjectStatus($customer_project_id, $status='', $isFollow=false)
+    {
+        $incCount = $isFollow ? 1 : 0;
+        $result = db('customer_project')->where('id',$customer_project_id)
+            ->inc('follow_count', $incCount)
+            ->update([
+                'follow_status' => $status
+            ]);
+        return $result;
+    }
+
+    public static function upadteProjectAuthorAndID($customer_id, $author='', $user_id=0)
+    {
+        if(!isset($customer_id) || empty($customer_id)) return;
+        $data = [];
+        if($user_id) $data['user_id'] = $user_id;
+        if($author) $data['author'] = $author;
     }
 
 

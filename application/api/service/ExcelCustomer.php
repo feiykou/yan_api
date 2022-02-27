@@ -52,7 +52,7 @@ class ExcelCustomer
             $insertData[$key]['user_id'] = $user_id;
             // 客户编号
             $code = json_decode($base->makeCustomerCode()->getContent(),true);
-            $user_code = $datum['D'] | $code['code'];
+            $user_code = !empty($datum['D']) ? $datum['D'] : $code['code'];
             $insertData[$key]['user_code'] = $user_code;
             // 客户来源
             $insertData[$key]['channel'] = $datum['E'];
@@ -111,6 +111,8 @@ class ExcelCustomer
             $followData[$key]['product_num'] = $datum['S'];
             // 报价
             $followData[$key]['product_price'] = $datum['T'];
+            // 客户名
+            $followData[$key]['customer_name'] = $datum['K'];
 
             // 主客户信息
             // 连接编码
