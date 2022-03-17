@@ -31,31 +31,32 @@ class ExcelCustomer
             'J' => "customer_type",
             'K' => "name",
             "customer_project" => [
-                'L' => "demand_desc",
-                'M' => "follow_count",
-                'N' => "reason",
-                'O' => "scene",
-                'P' => "industry",
-                'Q' => "product_type",
-                'R' => "product_spec",
-                'S' => "product_num",
-                'T' => "product_price",
-                'U' => "demand_bg",
-                'V' => "solution",
-                'W' => "install_solution",
-                'X' => "product_lights",
-                'Y' => "custom_value",
-                'Z' => "follow_difficulty",
-                'AA' => "custom_feedback"
+                'L' => "name",
+                'M' => "demand_desc",
+                'N' => "follow_count",
+                'O' => "reason",
+                'P' => "scene",
+                'Q' => "industry",
+                'R' => "product_type",
+                'S' => "product_spec",
+                'T' => "product_num",
+                'U' => "product_price",
+                'V' => "demand_bg",
+                'W' => "solution",
+                'X' => "install_solution",
+                'Y' => "product_lights",
+                'Z' => "custom_value",
+                'AA' => "follow_difficulty",
+                'AB' => "custom_feedback"
             ],
             "customer_main" => [
-                'AB' => "main_name",
-                'AC' => "main_contacts",
-                'AD' => "main_tel",
-                'AE' => "address_0",
-                'AF' => "address_1",
-                'AG' => "address_2",
-                'AH' => "main_spec_address"
+                'AC' => "main_name",
+                'AD' => "main_contacts",
+                'AE' => "main_tel",
+                'AF' => "address_0",
+                'AG' => "address_1",
+                'AH' => "address_2",
+                'AI' => "main_spec_address"
             ]
         ];
         $excel_index = $proJect_index = 2;
@@ -131,4 +132,57 @@ class ExcelCustomer
         }
         return $excelData;
     }
+
+    public static function handleLogExportData($data=[])
+    {
+        $excelData = [];
+        $excelKeyData = [
+            'A' => "status",
+            'B' => "author",
+            'C' => "channel",
+            'D' => "customer_user_code",
+            'E' => "customer_name",
+            'F' => "address_0",
+            'G' => "address_1",
+            'H' => "address_2",
+            'I' => "contacts_name",
+            'J' => "telephone",
+            'K' => "null",
+            'L' => "null",
+            'M' => "project_name",
+            'N' => "create_time",
+            'O' => "content",
+            'P' => "name"
+        ];
+        $excel_index = 2;
+        foreach ($data as $index => $val) {
+            $cacheData = [];
+            foreach ($excelKeyData as $key => $let ) {
+                $curKey = $key . $excel_index;
+                if(is_string($let) && strstr($let, 'address')) {
+                    if(is_array($val['address'])) {
+                        if(count($val['address']) == 0) {
+                            $cacheData[$curKey] = '';
+                        } else {
+                            $arr = explode('_',$let);
+                            $addressIndex = $arr[1];
+                            if(!isset($val['address'][$addressIndex])) {
+                                $cacheData[$curKey] = '';
+                            } else {
+                                $cacheData[$curKey] = $val['address'][$addressIndex];
+                            }
+                        }
+                    }
+                } else {
+                    $cacheData[$curKey] = $let == 'null' ? '' : strip_tags($val[$let]);
+                }
+            }
+            $excel_index ++;
+            array_push($excelData, $cacheData);
+        }
+        return $excelData;
+    }
+
+
+
 }

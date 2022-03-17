@@ -28,7 +28,8 @@ class CustomerLog extends BaseModel
     }
 
     protected function getContentAttr($value) {
-        return rawurldecode($value);
+//        html_entity_decode()
+        return html_entity_decode($value);
     }
 
     public function getStatusTextAttr($value,$data)
@@ -43,9 +44,17 @@ class CustomerLog extends BaseModel
      * 一对一
      * @return \think\model\relation\HasOne
      */
-    public function customerAdd()
+    public function customer()
     {
-        return $this->hasOne('customer_add', 'user_id', 'id');
+        return $this->hasOne('customer','id','customer_id')
+            ->bind([
+                'customer_name' => 'name',
+                'telephone',
+                'contacts_name',
+                'address',
+                'customer_user_code' => 'user_code',
+                'channel'
+            ]);
     }
 
     /**
@@ -57,31 +66,56 @@ class CustomerLog extends BaseModel
         return $this->hasOne('customer_main', 'user_id', 'id');
     }
 
-
+    public function customerProject()
+    {
+        return $this->hasOne('customer_project', 'id','project_id')
+            ->bind([
+                'project_name' => 'name'
+            ]);
+    }
 
     /**
      * 获取所有分页信息
      * @return array
      */
-    public static function getPaginate($params='',$status=0)
+    public static function getPaginate($uid=0, $params=[],$status=0)
     {
-        $where = [];
+        $field = ['status', 'user_code', 'author'];
+        $query = self::equalQuery($field, $params);
+        $query[] = self::betweenTimeQuery('start', 'end', $params);
+        if(!empty($query)) {
+            foreach ($query as $key => $val) {
+                if(isset($val) && empty($val)) {
+                    unset($query[$key]);
+                }
+            }
+        }
+        if(empty($query)) $query = [];
         // 如果customer_id和project_id都不存在，则获取日志失败
-        if(!isset($params['customer_id']) && !isset($params['project_id'])) return [
-            // 查询结果
-            'collection' => [],
-            // 总记录数
-            'total_nums' => 0
-        ];
-        if(isset($params['customer_id']) && !empty($params['customer_id'])) $where['customer_id'] = $params['customer_id'];
-        if(isset($params['project_id']) && !empty($params['project_id'])) $where['project_id'] = $params['project_id'];
+//        if(!isset($params['customer_id']) && !isset($params['project_id'])) return [
+//            // 查询结果
+//            'collection' => [],
+//            // 总记录数
+//            'total_nums' => 0
+//        ];
+        if($uid && $uid > 0) {
+            $query[] = ['user_id','=',$uid];
+        }
+        if(isset($params['customer_id']) && !empty($params['customer_id'])) $query[] = ['customer_id', '=', $params['customer_id']];
+        if(isset($params['project_id']) && !empty($params['project_id'])) $query[] = ['project_id','=',$params['project_id']];
         list($start, $count) = paginate();
         $listData = new self();
-        $totalNums = $listData->where($where)->count();
+        $totalNums = $listData->where($query)->count();
         $listData = $listData->limit($start, $count)
-            ->where($where)
+            ->where($query)
+            ->with(['customer', 'customerProject'])
             ->order(['create_time' => 'desc', 'id' => 'desc'])
             ->select();
+        foreach ($listData as &$val) {
+            if(empty($val['project_name'])) {
+                $val['project_name'] = '日常维护';
+            }
+        }
         $result = [
             // 查询结果
             'collection' => $listData,
@@ -119,5 +153,17 @@ class CustomerLog extends BaseModel
             ->group('date,customer_id')
             ->select();
         return $customer;
+    }
+
+    /**
+     * 获取客户日志信息
+     * @param array $ids
+     */
+    public static function getCustomerLogAndCustomer($ids=[])
+    {
+        $result = self::with(['customer', 'customerProject'])
+            ->order('id', 'desc')
+            ->all($ids);
+        return $result;
     }
 }

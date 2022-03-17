@@ -5,6 +5,7 @@ namespace app\api\service;
 
 
 use app\api\controller\Base;
+use app\api\model\Customer;
 use app\api\service\token\LoginToken;
 use LinCmsTp5\admin\model\LinUser;
 use LinCmsTp5\exception\BaseException;
@@ -79,38 +80,39 @@ class ExcelCustomer
             $followData[$key]['link_code'] = $linkIndex;
             // 业务员id
             $followData[$key]['user_id'] = $user_id;
+            $followData[$key]['name'] = $datum['L'];
             // 客户咨询/客户描述
-            $followData[$key]['demand_desc'] = $datum['L'];
+            $followData[$key]['demand_desc'] = $datum['M'];
             // 跟进次数
-            $followData[$key]['follow_count'] = $datum['M'];
+            $followData[$key]['follow_count'] = $datum['N'];
             // 丢单原因
-            $followData[$key]['reason'] = $datum['N'];
+            $followData[$key]['reason'] = $datum['O'];
             // 使用场景
-            $followData[$key]['scene'] = $datum['O'];
+            $followData[$key]['scene'] = $datum['P'];
             // 行业
-            $followData[$key]['industry'] = $datum['P'];
+            $followData[$key]['industry'] = $datum['Q'];
             // 客户背景
-            $followData[$key]['demand_bg'] = $datum['U'];
+            $followData[$key]['demand_bg'] = $datum['V'];
             // 提供对应解决方案
-            $followData[$key]['solution'] = $datum['V'];
+            $followData[$key]['solution'] = $datum['W'];
             // 工程安装解决方案
-            $followData[$key]['install_solution'] = $datum['W'];
+            $followData[$key]['install_solution'] = $datum['X'];
             // 客户关注产品亮点
-            $followData[$key]['product_lights'] = $datum['X'];
+            $followData[$key]['product_lights'] = $datum['Y'];
             // 客户价值
-            $followData[$key]['custom_value'] = $datum['Y'];
+            $followData[$key]['custom_value'] = $datum['Z'];
             // 业务跟进困难点
-            $followData[$key]['follow_difficulty'] = $datum['Z'];
+            $followData[$key]['follow_difficulty'] = $datum['AA'];
             // 客户反馈
-            $followData[$key]['custom_feedback'] = $datum['AA'];
+            $followData[$key]['custom_feedback'] = $datum['AB'];
             // 产品类型
-            $followData[$key]['product_type'] = $datum['Q'];
+            $followData[$key]['product_type'] = $datum['R'];
             // 产品规格
-            $followData[$key]['product_spec'] = $datum['R'];
+            $followData[$key]['product_spec'] = $datum['S'];
             // 数量
-            $followData[$key]['product_num'] = $datum['S'];
+            $followData[$key]['product_num'] = $datum['T'];
             // 报价
-            $followData[$key]['product_price'] = $datum['T'];
+            $followData[$key]['product_price'] = $datum['U'];
             // 客户名
             $followData[$key]['customer_name'] = $datum['K'];
 
@@ -120,34 +122,34 @@ class ExcelCustomer
             // 业务员id
             $mainData[$key]['user_id'] = $user_id;
             // 客户名称
-            if(trim($datum['AB'])) {
-                $mainData[$key]['main_name'] = $datum['AB'];
+            if(trim($datum['AC'])) {
+                $mainData[$key]['main_name'] = $datum['AC'];
             } else {
                 $mainData[$key]['main_name'] = '';
             }
             // 联系人
-            if(trim($datum['AC'])) {
-                $mainData[$key]['main_contacts'] = $datum['AC'];
+            if(trim($datum['AD'])) {
+                $mainData[$key]['main_contacts'] = $datum['AD'];
             } else {
                 $mainData[$key]['main_contacts'] = '';
             }
             // 手机号
-            if(trim($datum['AD'])) {
-                $mainData[$key]['main_tel'] = $datum['AD'];
+            if(trim($datum['AE'])) {
+                $mainData[$key]['main_tel'] = $datum['AE'];
             } else {
                 $mainData[$key]['main_tel'] = '';
             }
             // 省市地址
-            if($datum['AE'] && $datum['AF'] && $datum['AG']) {
-                if(!strpos($datum['AE'], '省')) $datum['AE'] .= '省';
-                if(!strpos($datum['AF'], '市')) $datum['AF'] .= '市';
-                $mainData[$key]['main_address'] = [$datum['AE'],$datum['AF'], $datum['AG'] ];
+            if($datum['AF'] && $datum['AG'] && $datum['AH']) {
+                if(!strpos($datum['AF'], '省')) $datum['AF'] .= '省';
+                if(!strpos($datum['AG'], '市')) $datum['AG'] .= '市';
+                $mainData[$key]['main_address'] = [$datum['AF'],$datum['AG'], $datum['AH'] ];
             } else {
                 $mainData[$key]['main_address'] = [];
             }
             // 具体收货地址
-            if(trim($datum['AH'])) {
-                $mainData[$key]['main_spec_address'] = $datum['AH'];
+            if(trim($datum['AI'])) {
+                $mainData[$key]['main_spec_address'] = $datum['AI'];
             } else {
                 $mainData[$key]['main_spec_address'] = '';
             }
@@ -158,6 +160,62 @@ class ExcelCustomer
             'main' => $mainData
         ];
     }
+
+    public static function setCustomerLogImportData()
+    {
+        $base = new Base();
+        $data = self::commonImportData(2);
+        if(!$data) {
+            return writeJson(201, [], '导入失败');
+        }
+        $insertData = []; // excel解析后数据
+        $userNameArr = []; // 管理员名称数组
+        $customerArr = []; // 客户编码数组
+        $customerIDArr = [];
+
+        foreach ($data as $key => $val) {
+            array_push($customerArr, $val['D']);
+        }
+        $customerIDs = Customer::where('user_code', 'in', $customerArr)
+            ->field(['user_code','id'])
+            ->select()
+            ->toArray();
+        if(count($customerIDs) > 0) {
+            foreach ($customerIDs as $datas) {
+                $customerIDArr[$datas['user_code']] = $datas['id'];
+            }
+        }
+        foreach ($data as $key => $datum) {
+            // 项目编码
+            $insertData[$key]['user_code'] = $datum['D'];
+            // 跟进状态
+            $insertData[$key]['status'] = $datum['A'];
+            $insertData[$key]['author'] = $datum['B'];
+            $insertData[$key]['content'] = $datum['O'].' | 客户需求：'.$datum['P'].' | 解决方案：'.$datum['Q'].' | 下次沟通内容：'.$datum['R'];
+            $insertData[$key]['name'] = $datum['P'];
+            // 咨询日期
+            $datum['N'] = DateFormatter::format($datum['N'],'YYYY-m-d');
+            $insertData[$key]['create_time'] = $datum['N'];
+            // 业务员id
+            $searVal = array_search($datum['B'], $userNameArr);
+            if(!$searVal) {
+                $user_id = self::getUserID($datum['B']);
+                $userNameArr[$user_id] = $datum['B'];
+            } else {
+                $user_id = $searVal;
+            }
+            $insertData[$key]['user_id'] = $user_id;
+            if(isset($customerIDArr[$datum['D']]) && !empty($customerIDArr[$datum['D']])) {
+                $insertData[$key]['customer_id'] =  $customerIDArr[$datum['D']];
+            }else {
+                $insertData[$key]['customer_id'] = 0;
+            };
+        }
+        return [
+            'log' => $insertData
+        ];
+    }
+
 
     /**
      * 使用PHPEXECL导入

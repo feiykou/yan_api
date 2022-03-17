@@ -42,9 +42,21 @@ class CustomerLog extends Base
      * @param customer_id  客户id
      * @auth('获取全部客户日志信息','客户日志管理')
      */
-    public function getAllCustomer() {
+    public function getAllCustomerLogs() {
         $params = Request::get();
-        $result = CustomerLogModel::getPaginate($params);
+        $result = CustomerLogModel::getPaginate(-1,$params);
+        return $result;
+    }
+
+    /**
+     * 获取当前管理员的客户日志信息
+     * @return array
+     */
+    public function getCustomerLogs(){
+        $token = LoginToken::getInstance();
+        $uid = $token->getCurrentUid();
+        $params = Request::get();
+        $result = CustomerLogModel::getPaginate($uid,$params);
         return $result;
     }
 

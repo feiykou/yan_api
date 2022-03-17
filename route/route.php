@@ -99,8 +99,10 @@ Route::group('', function () {
             Route::get('link_code/:link_code', 'api/v1.Customer/getCustomerByLinkcode', ['link_code'=>'\d']);
         });
         Route::group('customer_log',function (){
+            // 查询当前管理员所有客户日志
+            Route::get('', 'api/v1.CustomerLog/getCustomerLogs');
             // 查询所有客户日志
-            Route::get('', 'api/v1.CustomerLog/getAllCustomer');
+            Route::get('all', 'api/v1.CustomerLog/getAllCustomerLogs');
             // 新建客户日志
             Route::post('', 'api/v1.CustomerLog/create');
             // 查询指定id的客户日志,并获取审核权限
@@ -178,6 +180,7 @@ Route::group('', function () {
         Route::group('excel',function (){
             // 查询当前管理员所有客户
             Route::post('customer_log', 'api/v1.ExcelCustomer/importCustomerLog');
+            Route::get('customer_log', 'api/v1.ExcelCustomer/exportCustomerLog');
             Route::post('customer', 'api/v1.ExcelCustomer/importCustomer');
             Route::get('customer', 'api/v1.ExcelCustomer/exportCustomer');
         });
