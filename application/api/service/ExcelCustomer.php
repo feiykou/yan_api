@@ -27,6 +27,7 @@ class ExcelCustomer
 {
     public static function setImportData()
     {
+//        header("Content-type:text/html;charset=utf-8");
         $base = new Base();
         $data = self::commonImportData(2);
         if(!$data) {
@@ -35,6 +36,7 @@ class ExcelCustomer
         $insertData = [];
         $followData = [];
         $mainData = [];
+        $userNameArr = [];
         foreach ($data as $key => $datum) {
             $linkIndex = $base->makeLinkIndex();
             // 连接编码
@@ -46,10 +48,20 @@ class ExcelCustomer
             $insertData[$key]['create_time'] = $datum['B'];
             // 跟进业务员名和业务员id
             $token = LoginToken::getInstance();
-            $author = $datum['C'] | $token->getCurrentUserName();
+            $author = $datum['C'];
+            if(empty($datum['C'])) {
+                $author = $token->getCurrentUserName();
+            }
             $insertData[$key]['author'] = $author;
             // 业务员id
-            $user_id = self::getUserID($author);
+            $searVal = array_search($author, $userNameArr);
+            if(!$searVal) {
+                $user_id = self::getUserID($author);
+                $userNameArr[$user_id] = $author;
+            } else {
+                $user_id = $searVal;
+            }
+
             $insertData[$key]['user_id'] = $user_id;
             // 客户编号
             $code = json_decode($base->makeCustomerCode()->getContent(),true);
@@ -196,11 +208,16 @@ class ExcelCustomer
             // 咨询日期
             $datum['N'] = DateFormatter::format($datum['N'],'YYYY-m-d');
             $insertData[$key]['create_time'] = $datum['N'];
+            $token = LoginToken::getInstance();
+            $author = $datum['B'];
+            if(empty($datum['B'])) {
+                $author = $token->getCurrentUserName();
+            }
             // 业务员id
-            $searVal = array_search($datum['B'], $userNameArr);
+            $searVal = array_search($author, $userNameArr);
             if(!$searVal) {
-                $user_id = self::getUserID($datum['B']);
-                $userNameArr[$user_id] = $datum['B'];
+                $user_id = self::getUserID($author);
+                $userNameArr[$user_id] = $author;
             } else {
                 $user_id = $searVal;
             }
@@ -255,6 +272,7 @@ class ExcelCustomer
     public static function importExecl($file = '', $start_row = 1)
     {
         $file = iconv("utf-8", "gb2312", $file);
+//        $file = iconv("gb2312", "utf-8", $file);
         if (empty($file) OR !file_exists($file)) {
             throw new BaseException([
                 'msg' => '文件不存在',
