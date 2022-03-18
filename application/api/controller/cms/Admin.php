@@ -18,10 +18,10 @@ use think\Request;
 
 class Admin
 {
-
+//@auth('查询所有用户','管理员','hidden')
     /**
      * 配置hidden后，这个权限信息不会挂载到权限图，获取所有可分配的权限时不会显示这个权限
-     * @auth('查询所有用户','管理员','hidden')
+     *
      * @param Request $request
      * @return array
      * @throws \think\exception\DbException
