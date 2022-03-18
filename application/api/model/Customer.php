@@ -145,6 +145,24 @@ class Customer extends BaseModel
     }
 
     /**
+     * 通过link_code获取客户信息
+     * @param string $linkCode
+     * @param string[] $field  客户信息字段
+     * @return array|\PDOStatement|string|\think\Model
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public static function getCustomerByLinkCode($linkCode='', $field=['id', 'name'])
+    {
+        $result = self::where(['link_code' => $linkCode])
+            ->field($field)
+            ->find();
+        if(!$result) return [];
+        return $result;
+    }
+
+    /**
      * 更新跟进时间
      */
     public static function updateFollowTime($customer_id = 0)

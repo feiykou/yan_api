@@ -51,7 +51,7 @@ class CustomerProject extends Base
     public function getAllCustomerProjects()
     {
         $params = Request::get();
-        $result = CustomerProjectModel::getPaginate($params);
+        $result = CustomerProjectModel::getPaginate(null,null,$params);
         return $result;
     }
 
@@ -89,6 +89,13 @@ class CustomerProject extends Base
             $params['author'] = $token->getCurrentUserName();
             $params['user_id'] = $token->getCurrentUID();
         }
+        if(isset($params['link_code']) && !empty($params['link_code'])) {
+            $customerInfo = \app\api\model\Customer::getCustomerByLinkCode($params['link_code']);
+            if(isset($customerInfo['name']) && !empty($customerInfo['name'])) {
+                $params['customer_name'] = $customerInfo['name'];
+            }
+        }
+
         $result = CustomerProjectModel::create($params, true);
         if (!$result) {
             throw new ProjectException([
@@ -107,6 +114,7 @@ class CustomerProject extends Base
     public function update()
     {
         $params = Request::put();
+
         $result = CustomerProjectModel::update($params, [], true);
         if (!$result) {
             throw new ProjectException([

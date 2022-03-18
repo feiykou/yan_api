@@ -30,6 +30,7 @@ class CustomerProject extends BaseModel
         $field = ['name', 'follow_status', 'customer_name'];
         $where = self::equalQuery($field, $params);
         $where[] = self::betweenTimeQuery('start', 'end', $params);
+
         if(!empty($where)) {
             foreach ($where as $key => $val) {
                 if(isset($val) && empty($val)) {
@@ -38,8 +39,8 @@ class CustomerProject extends BaseModel
             }
         }
         if(empty($where)) $where = [];
-        if(isset($customerID) && $customerID && !empty($customerID)) $where[] = ['link_code','=',intval($customerID)];
-        if(isset($UID) && $UID && !empty($UID)) $where[] = ['user_id', '=', $UID];
+        if(isset($customerID) && !empty($customerID)) $where['link_code'] = intval($customerID);
+        if(isset($UID) && !empty($UID)) $where['user_id'] = $UID;
         list($start, $count) = paginate();
         $listData = new self();
         $totalNums = $listData->where($where)->count();
