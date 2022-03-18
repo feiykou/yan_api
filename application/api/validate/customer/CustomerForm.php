@@ -11,7 +11,7 @@ class CustomerForm extends BaseValidate
     protected $rule = [
         'name' => 'require',
         'contacts_name' => 'require',
-        'telephone' => 'mobile',
+//        'telephone' => 'mobile',
         'email' => 'email',
 //        'address' => 'require',
         'purpose' => 'require',
