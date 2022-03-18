@@ -82,9 +82,11 @@ class CustomerLog extends Base
             ]);
         }
         // 更新跟进时间
-        if( isset($params['customer_id']) && $params['customer_id']) {
+        if( isset($params['customer_id'])) {
             CustomerModel::updateFollowTime($params['customer_id']);
             CustomerModel::updateCustomerStatus($params['customer_id'], $params['status']);
+        }
+        if(isset($params['project_id'])) {
             CustomerProjectModel::updateCustomerProjectStatus($params['project_id'], $params['status']);
         }
         return writeJson(201, [], '新增成功');

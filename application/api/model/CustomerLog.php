@@ -80,7 +80,7 @@ class CustomerLog extends BaseModel
      */
     public static function getPaginate($uid=0, $params=[],$status=0)
     {
-        $field = ['status', 'user_code', 'author'];
+        $field = ['status', 'author'];
         $query = self::equalQuery($field, $params);
         $query[] = self::betweenTimeQuery('start', 'end', $params);
         if(!empty($query)) {
@@ -101,7 +101,7 @@ class CustomerLog extends BaseModel
         if($uid && $uid > 0) {
             $query[] = ['user_id','=',$uid];
         }
-        if(isset($params['customer_id']) && !empty($params['customer_id'])) $query[] = ['customer_id', '=', $params['customer_id']];
+        if(isset($params['user_code']) && !empty($params['user_code'])) $query[] = ['user_code', '=', $params['user_code']];
         if(isset($params['project_id']) && !empty($params['project_id'])) $query[] = ['project_id','=',$params['project_id']];
         list($start, $count) = paginate();
         $listData = new self();
