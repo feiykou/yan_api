@@ -93,6 +93,7 @@ class ExcelCustomer extends Base
         // 导出数据
         $data = Customer::getCustomerAndProject($ids)->toArray();
         $excelFormatData = ExcelCustomerModel::handleExportData($data);
+        var_dump($excelFormatData);
         array_unshift($excelFormatData, $sheetHeader);
         $result = ExcelCustomerService::exportExcel($excelFormatData,'客户信息模板', [
             'setARGB' => $setBgCell,

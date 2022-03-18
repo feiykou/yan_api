@@ -102,7 +102,7 @@ class ExcelCustomer
                     if(!empty($mainData) && count($mainData) > 0) {
                         foreach ($let as $mkey => $mval) {
                             $mainCurKey = $mkey . $excel_index;
-                            if(strstr($mval, 'address')) {
+                            if(strstr($mval, 'address_')) {
                                 if(count($mainData['main_address']) == 0) {
                                     $cacheData[$mainCurKey] = '';
                                 } else {
