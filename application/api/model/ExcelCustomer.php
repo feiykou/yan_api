@@ -21,7 +21,7 @@ class ExcelCustomer
         $excelKeyData = [
             'A' => "follow_status",
             'B' => "create_time",
-            'C' => "null",
+            'C' => "author",
             'D' => "user_code",
             'E' => "channel",
             'F' => "address_0",
