@@ -75,7 +75,6 @@ class Customer extends BaseModel
                 }
             }
         }
-        var_dump($query);
         if(empty($query)) $query = [];
         if($uid && $uid > 0) {
             $query[] = ['user_id','=',$uid];
