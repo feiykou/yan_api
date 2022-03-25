@@ -62,11 +62,11 @@ class Customer extends BaseModel
     {
         $field = ['name', 'follow_status', 'user_code', 'author', 'contacts_name', 'telephone'];
         $query = self::equalQuery($field, $params);
-//        $query[] = self::betweenTimeQuery('start', 'end', $params);
-        if(isset($params['provice']) && !empty($params['provice'])) {
-            $query[] = ['address[0]','=','河南省'];
-
-        }
+        $query[] = self::betweenTimeQuery('start', 'end', $params);
+//        if(isset($params['provice']) && !empty($params['provice'])) {
+//            $query[] = ['address[0]','=','河南省'];
+//
+//        }
 
         if(!empty($query)) {
             foreach ($query as $key => $val) {
