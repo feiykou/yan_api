@@ -108,4 +108,23 @@ class CustomerProject extends BaseModel
             ->select();
         return $customer;
     }
+
+
+    /**
+     * 通过project_id获取customer_id，用在项目审核中
+     */
+    public static function getCustomerIDByProjectID($project_id=0)
+    {
+        if(!isset($project_id) || empty($project_id)) {
+            return false;
+        }
+        $result = self::where('id', $project_id)
+            ->with(['customer' => function($query) {
+                $query->field('id, link_code');
+            }])->find();
+        if(!$result || !$result['customer']) {
+            return false;
+        }
+        return $result['customer'];
+    }
 }

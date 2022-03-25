@@ -84,10 +84,14 @@ class CustomerLog extends Base
         // 更新跟进时间
         if( isset($params['customer_id'])) {
             CustomerModel::updateFollowTime($params['customer_id']);
-            CustomerModel::updateCustomerStatus($params['customer_id'], $params['status']);
         }
+        // 根据project_id字段判断，是客户日志还是项目日志
         if(isset($params['project_id'])) {
             CustomerProjectModel::updateCustomerProjectStatus($params['project_id'], $params['status']);
+        } else { // 客户状态更新
+            if( isset($params['customer_id'])) {
+                CustomerModel::updateCustomerStatus($params['customer_id'], $params['status']);
+            }
         }
         return writeJson(201, [], '新增成功');
     }
@@ -114,10 +118,16 @@ class CustomerLog extends Base
             ]);
         }
         // 更新跟进时间
-        if( isset($params['customer_id']) && $params['customer_id']) {
+        if( isset($params['customer_id'])) {
             CustomerModel::updateFollowTime($params['customer_id']);
-            CustomerModel::updateCustomerStatus($params['customer_id'], $params['status']);
+        }
+        // 根据project_id字段判断，是客户日志还是项目日志
+        if(isset($params['project_id'])) {
             CustomerProjectModel::updateCustomerProjectStatus($params['project_id'], $params['status']);
+        } else { // 客户状态更新
+            if( isset($params['customer_id'])) {
+                CustomerModel::updateCustomerStatus($params['customer_id'], $params['status']);
+            }
         }
         return writeJson(201, [], '更新成功');
     }

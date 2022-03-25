@@ -126,6 +126,20 @@ Route::group('', function () {
             // 删除项目信息
             Route::delete('', 'api/v1.CustomerProject/delete');
         });
+        Route::group('project_examine',function (){
+            // 查询指定项目审核
+            Route::get('', 'api/v1.ProjectExamine/getCurUserInfos');
+            // 查询所有项目审核
+            Route::get('all', 'api/v1.ProjectExamine/getAllInfo');
+            // 查询指定id的项目审核
+            Route::get(':id', 'api/v1.ProjectExamine/getProjectExamine', ['id'=>'\d']);
+            // 新建项目审核
+            Route::post('', 'api/v1.ProjectExamine/create');
+            // 更新项目审核
+            Route::put(':id', 'api/v1.ProjectExamine/update', ['id'=>'\d']);
+            // 删除项目信息
+//            Route::delete('', 'api/v1.ProjectExamine/delete');
+        });
         Route::group('customer_report',function (){
             // 查询当前管理员所有客户
             Route::get('', 'api/v1.CustomerReport/getlists');
@@ -197,7 +211,6 @@ Route::group('', function () {
 
 
         });
-
     });
 })->middleware(['Auth','ReflexValidate'])->allowCrossDomain();
 

@@ -44,7 +44,7 @@ class Customer extends BaseModel
     }
 
     /**
-     * 一对一
+     * 一对多
      * @return \think\model\relation\HasOne
      */
     public function customerProject()
@@ -60,9 +60,14 @@ class Customer extends BaseModel
      */
     public static function getCustomerPaginate($uid='',$params=[])
     {
-        $field = ['name', 'follow_status', 'user_code', 'author'];
+        $field = ['name', 'follow_status', 'user_code', 'author', 'contacts_name', 'telephone'];
         $query = self::equalQuery($field, $params);
-        $query[] = self::betweenTimeQuery('start', 'end', $params);
+//        $query[] = self::betweenTimeQuery('start', 'end', $params);
+        if(isset($params['provice']) && !empty($params['provice'])) {
+            $query[] = ['address[0]','=','河南省'];
+
+        }
+
         if(!empty($query)) {
             foreach ($query as $key => $val) {
                 if(isset($val) && empty($val)) {
@@ -70,6 +75,7 @@ class Customer extends BaseModel
                 }
             }
         }
+        var_dump($query);
         if(empty($query)) $query = [];
         if($uid && $uid > 0) {
             $query[] = ['user_id','=',$uid];
@@ -292,5 +298,6 @@ class Customer extends BaseModel
         ]);
         return $result;
     }
+
 
 }

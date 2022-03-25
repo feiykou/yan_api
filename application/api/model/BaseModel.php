@@ -106,7 +106,7 @@ class BaseModel extends Model
                 }
             } else {
                 if (array_key_exists($value, $params)) {
-                    if($value == 'name' || $value == 'user_code' || $value == 'customer_name') {
+                    if($value == 'name' || $value == 'user_code' || $value == 'customer_name' || $value == 'contacts_name' || $value == 'telephone') {
                         $query[] = [$value, 'like', '%'.$params[$value].'%'];
                     } else {
                         $query[] = [$value, '=', $params[$value]];

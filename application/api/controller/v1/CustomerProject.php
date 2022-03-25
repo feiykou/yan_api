@@ -6,7 +6,7 @@ namespace app\api\controller\v1;
 
 use app\api\controller\Base;
 use app\api\model\CustomerProject as CustomerProjectModel;
-use app\lib\exception\customer_project\ProjectException;
+use app\lib\exception\customer_project\CustomerProjectException;
 use think\Db;
 use think\Exception;
 use app\api\service\token\LoginToken;
@@ -35,7 +35,7 @@ class CustomerProject extends Base
     {
         $result = CustomerProjectModel::getDetail($id);
         if (!$result) {
-            throw new ProjectException([
+            throw new CustomerProjectException([
                 'msg' => '客户项目不存在',
                 'error_code' => '51004'
             ]);
@@ -79,7 +79,7 @@ class CustomerProject extends Base
      * 创建信息
      * @validate('CustomerProjectForm')
      * @return \think\response\Json
-     * @throws ProjectException
+     * @throws CustomerProjectException
      */
     public function create()
     {
@@ -95,10 +95,16 @@ class CustomerProject extends Base
                 $params['customer_name'] = $customerInfo['name'];
             }
         }
+        if(isset($params['follow_status']) && !empty($params['follow_status'])) {
+            if(strstr($params['follow_status'],config('setting.follow_status_examine'))) {
+                unset($params['follow_status']);
+            }
+        }
+
 
         $result = CustomerProjectModel::create($params, true);
         if (!$result) {
-            throw new ProjectException([
+            throw new CustomerProjectException([
                 'msg' => '创建失败',
                 'error_code' => '51004'
             ]);
@@ -114,10 +120,14 @@ class CustomerProject extends Base
     public function update()
     {
         $params = Request::put();
-
+        if(isset($params['follow_status']) && !empty($params['follow_status'])) {
+            if(strstr($params['follow_status'],config('setting.follow_status_examine'))) {
+                unset($params['follow_status']);
+            }
+        }
         $result = CustomerProjectModel::update($params, [], true);
         if (!$result) {
-            throw new ProjectException([
+            throw new CustomerProjectException([
                 'msg' => '更新失败',
                 'error_code' => '51004'
             ]);
@@ -139,7 +149,7 @@ class CustomerProject extends Base
         array_map(function ($id) {
             $customer = CustomerProjectModel::get($id);
             if(!$customer) {
-                throw new ProjectException([
+                throw new CustomerProjectException([
                     'msg' => 'id为' . $id . '不存在'
                 ]);
             }
