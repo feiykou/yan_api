@@ -33,7 +33,7 @@ class CustomerProjectExamine extends BaseModel
         $listData = $listData->limit($start, $count)
             ->where($where)
             ->with('project')
-            ->order(['create_time' => 'desc','status' => 'desc'])
+            ->order(['update_time' => 'desc','status' => 'desc'])
             ->select();
         $result = [
             // 查询结果
