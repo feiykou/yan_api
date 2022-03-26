@@ -82,7 +82,7 @@ class CustomerLog extends BaseModel
     {
         $field = ['status', 'author'];
         $query = self::equalQuery($field, $params);
-        $query[] = self::betweenTimeQuery('start', 'end', $params);
+        $query[] = self::betweenTimeQuery('start', 'end', $params,'update_time');
         if(!empty($query)) {
             foreach ($query as $key => $val) {
                 if(isset($val) && empty($val)) {

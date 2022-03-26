@@ -90,6 +90,7 @@ class ExcelCustomer
             // 项目跟进
             // 连接编码
             $followData[$key]['link_code'] = $linkIndex;
+            $followData[$key]['user_code'] = $user_code;
             // 业务员id
             $followData[$key]['user_id'] = $user_id;
             $followData[$key]['name'] = $datum['L'];
@@ -127,6 +128,8 @@ class ExcelCustomer
             $followData[$key]['product_price'] = $datum['U'];
             // 客户名
             $followData[$key]['customer_name'] = $datum['K'];
+            // 客户来源
+            $followData[$key]['project_channel'] = $datum['AC'];
 
             // 主客户信息
             // 连接编码
@@ -134,34 +137,34 @@ class ExcelCustomer
             // 业务员id
             $mainData[$key]['user_id'] = $user_id;
             // 客户名称
-            if(trim($datum['AC'])) {
-                $mainData[$key]['main_name'] = $datum['AC'];
+            if(trim($datum['AD'])) {
+                $mainData[$key]['main_name'] = $datum['AD'];
             } else {
                 $mainData[$key]['main_name'] = '';
             }
             // 联系人
-            if(trim($datum['AD'])) {
-                $mainData[$key]['main_contacts'] = $datum['AD'];
+            if(trim($datum['AE'])) {
+                $mainData[$key]['main_contacts'] = $datum['AE'];
             } else {
                 $mainData[$key]['main_contacts'] = '';
             }
             // 手机号
-            if(trim($datum['AE'])) {
-                $mainData[$key]['main_tel'] = $datum['AE'];
+            if(trim($datum['AF'])) {
+                $mainData[$key]['main_tel'] = $datum['AF'];
             } else {
                 $mainData[$key]['main_tel'] = '';
             }
             // 省市地址
-            if($datum['AF'] && $datum['AG'] && $datum['AH']) {
-                if(!strpos($datum['AF'], '省')) $datum['AF'] .= '省';
-                if(!strpos($datum['AG'], '市')) $datum['AG'] .= '市';
-                $mainData[$key]['main_address'] = [$datum['AF'],$datum['AG'], $datum['AH'] ];
+            if($datum['AG'] && $datum['AH'] && $datum['AI']) {
+                if(!strpos($datum['AG'], '省')) $datum['AG'] .= '省';
+                if(!strpos($datum['AH'], '市')) $datum['AH'] .= '市';
+                $mainData[$key]['main_address'] = [$datum['AG'],$datum['AH'], $datum['AI'] ];
             } else {
                 $mainData[$key]['main_address'] = [];
             }
             // 具体收货地址
-            if(trim($datum['AI'])) {
-                $mainData[$key]['main_spec_address'] = $datum['AI'];
+            if(trim($datum['AJ'])) {
+                $mainData[$key]['main_spec_address'] = $datum['AJ'];
             } else {
                 $mainData[$key]['main_spec_address'] = '';
             }

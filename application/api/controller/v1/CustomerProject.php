@@ -7,6 +7,7 @@ namespace app\api\controller\v1;
 use app\api\controller\Base;
 use app\api\model\CustomerProject as CustomerProjectModel;
 use app\lib\exception\customer_project\CustomerProjectException;
+use LinCmsTp5\exception\BaseException;
 use think\Db;
 use think\Exception;
 use app\api\service\token\LoginToken;
@@ -90,17 +91,21 @@ class CustomerProject extends Base
             $params['user_id'] = $token->getCurrentUID();
         }
         if(isset($params['link_code']) && !empty($params['link_code'])) {
-            $customerInfo = \app\api\model\Customer::getCustomerByLinkCode($params['link_code']);
-            if(isset($customerInfo['name']) && !empty($customerInfo['name'])) {
-                $params['customer_name'] = $customerInfo['name'];
+            $customerInfo = \app\api\model\Customer::getCustomerByLinkCode($params['link_code'], ['id', 'name', 'user_code']);
+            if(!$customerInfo) {
+                throw new CustomerProjectException([
+                    'msg' => '创建失败，参数不正确',
+                    'error_code' => '51004'
+                ]);
             }
+            $params['customer_name'] = $customerInfo['name'];
+            $params['user_code'] = $customerInfo['user_code'];
         }
         if(isset($params['follow_status']) && !empty($params['follow_status'])) {
             if(strstr($params['follow_status'],config('setting.follow_status_examine'))) {
                 unset($params['follow_status']);
             }
         }
-
 
         $result = CustomerProjectModel::create($params, true);
         if (!$result) {

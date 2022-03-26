@@ -27,9 +27,9 @@ class CustomerProject extends BaseModel
      */
     public static function getPaginate($UID='', $customerID='', $params=[])
     {
-        $field = ['name', 'follow_status', 'customer_name'];
+        $field = ['name', 'follow_status', 'customer_name', 'user_code'];
         $where = self::equalQuery($field, $params);
-        $where[] = self::betweenTimeQuery('start', 'end', $params);
+        $where[] = self::betweenTimeQuery('start', 'end', $params, 'update_time');
 
         if(!empty($where)) {
             foreach ($where as $key => $val) {

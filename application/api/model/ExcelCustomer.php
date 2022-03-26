@@ -47,16 +47,17 @@ class ExcelCustomer
                 'Y' => "product_lights",
                 'Z' => "custom_value",
                 'AA' => "follow_difficulty",
-                'AB' => "custom_feedback"
+                'AB' => "custom_feedback",
+                'AC' => "project_channel"
             ],
             "customer_main" => [
-                'AC' => "main_name",
-                'AD' => "main_contacts",
-                'AE' => "main_tel",
-                'AF' => "address_0",
-                'AG' => "address_1",
-                'AH' => "address_2",
-                'AI' => "main_spec_address"
+                'AD' => "main_name",
+                'AE' => "main_contacts",
+                'AF' => "main_tel",
+                'AG' => "address_0",
+                'AH' => "address_1",
+                'AI' => "address_2",
+                'AJ' => "main_spec_address"
             ]
         ];
         $excel_index = $proJect_index = 2;

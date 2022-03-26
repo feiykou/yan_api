@@ -10,6 +10,7 @@ class CustomerProjectForm extends BaseValidate
 {
     protected $rule = [
         'name' => 'require',
+        'link_code' => 'require'
 //        'content' => 'require'
     ];
 
