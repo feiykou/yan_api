@@ -39,8 +39,8 @@ class CustomerProject extends BaseModel
             }
         }
         if(empty($where)) $where = [];
-        if(isset($customerID) && !empty($customerID)) $where['link_code'] = intval($customerID);
-        if(isset($UID) && !empty($UID)) $where['user_id'] = $UID;
+        if(isset($customerID) && !empty($customerID)) $where[] = ['link_code', '=',intval($customerID)];
+        if(isset($UID) && !empty($UID)) $where[] = ['user_id','=',$UID];
         list($start, $count) = paginate();
         $listData = new self();
         $totalNums = $listData->where($where)->count();
