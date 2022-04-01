@@ -105,6 +105,10 @@ class CustomerProject extends Base
             if(strstr($params['follow_status'],config('setting.follow_status_examine'))) {
                 unset($params['follow_status']);
             }
+            if($params['follow_status'] == config('setting.project_sucess_time')) {
+                $dateTime = new \DateTime();
+                $params['status_success_time'] = $dateTime->format('Y-m-d H:i:s');
+            }
         }
 
         $result = CustomerProjectModel::create($params, true);
@@ -128,6 +132,10 @@ class CustomerProject extends Base
         if(isset($params['follow_status']) && !empty($params['follow_status'])) {
             if(strstr($params['follow_status'],config('setting.follow_status_examine'))) {
                 unset($params['follow_status']);
+            }
+            if($params['follow_status'] == config('setting.project_sucess_time')) {
+                $dateTime = new \DateTime();
+                $params['status_success_time'] = $dateTime->format('Y-m-d H:i:s');
             }
         }
         $result = CustomerProjectModel::update($params, [], true);

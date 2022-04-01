@@ -29,7 +29,11 @@ class CustomerProject extends BaseModel
     {
         $field = ['name', 'follow_status', 'customer_name', 'user_code'];
         $where = self::equalQuery($field, $params);
-        $where[] = self::betweenTimeQuery('start', 'end', $params, 'update_time');
+        $timedbField = 'update_time';
+        if(isset($params['follow_status']) && !empty($params['follow_status']) && $params['follow_status'] == config('setting.project_sucess_time')) {
+            $timedbField = 'status_success_time';
+        }
+        $where[] = self::betweenTimeQuery('start', 'end', $params, $timedbField);
 
         if(!empty($where)) {
             foreach ($where as $key => $val) {
@@ -76,11 +80,15 @@ class CustomerProject extends BaseModel
     public static function updateCustomerProjectStatus($customer_project_id, $status='', $isFollow=false)
     {
         $incCount = $isFollow ? 1 : 0;
+        $data = [];
+        $data['follow_status'] = $status;
+        if($status == config('setting.project_sucess_time')) {
+            $dateTime = new \DateTime();
+            $data['status_success_time'] = $dateTime->format('Y-m-d H:i:s');
+        }
         $result = db('customer_project')->where('id',$customer_project_id)
             ->inc('follow_count', $incCount)
-            ->update([
-                'follow_status' => $status
-            ]);
+            ->update($data);
         return $result;
     }
 
