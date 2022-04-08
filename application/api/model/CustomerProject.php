@@ -21,6 +21,11 @@ class CustomerProject extends BaseModel
 //            ]);
     }
 
+    public function customerMain()
+    {
+        return $this->hasOne('customer_main','link_code', 'link_code');
+    }
+
     /**
      * 获取所有分页信息
      * @return array
@@ -71,6 +76,20 @@ class CustomerProject extends BaseModel
         ];
         $result = self::where($where)
             ->find();
+        return $result;
+    }
+
+    /**
+     * 通过ids获取项目及客户信息
+     * @param array $ids
+     * @return false|\PDOStatement|string|\think\Collection|\think\db\Query[]|\think\model\Collection
+     * @throws \think\Exception\DbException
+     */
+    public static function getProjectAndCustomer($ids=[])
+    {
+        $result = self::with(['customerMain', 'customer'])
+            ->order('id', 'desc')
+            ->all($ids);
         return $result;
     }
 

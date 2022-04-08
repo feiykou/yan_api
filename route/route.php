@@ -197,6 +197,7 @@ Route::group('', function () {
             Route::get('customer_log', 'api/v1.ExcelCustomer/exportCustomerLog');
             Route::post('customer', 'api/v1.ExcelCustomer/importCustomer');
             Route::get('customer', 'api/v1.ExcelCustomer/exportCustomer');
+            Route::get('customer_project', 'api/v1.ExcelCustomer/exportCustomerProject');
         });
         // 数据分析接口
         Route::group('analysis', function () {

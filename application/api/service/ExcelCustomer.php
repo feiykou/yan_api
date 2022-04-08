@@ -44,7 +44,11 @@ class ExcelCustomer
             // 跟进状态
             $insertData[$key]['follow_status'] = $datum['A'];
             // 咨询日期
-            $datum['B'] = DateFormatter::format($datum['B'],'YYYY-m-d');
+            try {
+                $datum['B'] = DateFormatter::format($datum['B'],'YYYY-m-d');
+            } catch (Exception $e) {
+                $datum['B'] = date('y-m-d H:i:s', time());
+            }
             $insertData[$key]['create_time'] = $datum['B'];
             // 跟进业务员名和业务员id
             $token = LoginToken::getInstance();
@@ -74,7 +78,7 @@ class ExcelCustomer
                 if( !$datum['G'] ) $datum['G'] = '';
                 if(!strpos($datum['F'], '省')) $datum['F'] .= '省';
                 if(!strpos($datum['G'], '市')) $datum['G'] .= '市';
-                $insertData[$key]['address'] = [$datum['F'],$datum['G']];
+                $insertData[$key]['address'] = ['province' => $datum['F'], 'city' => $datum['G']];
             }
 //            $insertData[$key]['address'] = json([$datum['F'],$datum['G']]);
             // 联系人

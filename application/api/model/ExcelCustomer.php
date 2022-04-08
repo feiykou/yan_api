@@ -90,6 +90,7 @@ class ExcelCustomer
                                 if($dataKey >= 1) {
                                     $proCache[$proCurKey] = $dataVal[$pval];
                                 } else {
+
                                     $cacheData[$proCurKey] = $dataVal[$pval];
                                 }
                             }
@@ -143,8 +144,8 @@ class ExcelCustomer
             'C' => "channel",
             'D' => "customer_user_code",
             'E' => "customer_name",
-            'F' => "address_0",
-            'G' => "address_1",
+            'F' => "address_1",  // 1：省份
+            'G' => "address_0",  // 0：城市
             'H' => "address_2",
             'I' => "contacts_name",
             'J' => "telephone",
@@ -161,16 +162,18 @@ class ExcelCustomer
             foreach ($excelKeyData as $key => $let ) {
                 $curKey = $key . $excel_index;
                 if(is_string($let) && strstr($let, 'address')) {
+                    $val['address'] = json_decode(json_encode($val['address']), true);
                     if(is_array($val['address'])) {
-                        if(count($val['address']) == 0) {
+                        $address = array_values($val['address']);
+                        if(count($address) == 0) {
                             $cacheData[$curKey] = '';
                         } else {
                             $arr = explode('_',$let);
                             $addressIndex = $arr[1];
-                            if(!isset($val['address'][$addressIndex])) {
+                            if(!isset($address[$addressIndex])) {
                                 $cacheData[$curKey] = '';
                             } else {
-                                $cacheData[$curKey] = $val['address'][$addressIndex];
+                                $cacheData[$curKey] = $address[$addressIndex];
                             }
                         }
                     }
