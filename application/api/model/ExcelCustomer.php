@@ -73,7 +73,11 @@ class ExcelCustomer
                     } else {
                         $arr = explode('_',$let);
                         $addressIndex = $arr[1];
-                        $cacheData[$curKey] = $val['address'][$addressIndex]?:'';
+                        if(isset($val['address'][$addressIndex])) {
+                            $cacheData[$curKey] = $val['address'][$addressIndex]?:'';
+                        }else {
+                            $cacheData[$curKey] = '';
+                        }
                     }
                 } elseif ($key == 'customer_project') {
                     if(isset($val['customer_project']) && count($val['customer_project']) > 0) {
@@ -110,7 +114,11 @@ class ExcelCustomer
                                 } else {
                                     $arr = explode('_',$mval);
                                     $addressIndex = $arr[1];
-                                    $cacheData[$mainCurKey] = $mainData['main_address'][$addressIndex]?:'';
+                                    if(isset($mainData['main_address'][$addressIndex])) {
+                                        $cacheData[$mainCurKey] = $mainData['main_address'][$addressIndex]?:'';
+                                    }else {
+                                        $cacheData[$mainCurKey] = '';
+                                    }
                                 }
                             } else{
                                 $cacheData[$mainCurKey] = $mainData[$mval];
