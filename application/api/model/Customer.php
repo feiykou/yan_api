@@ -63,8 +63,9 @@ class Customer extends BaseModel
         $field = ['name', 'follow_status', 'user_code', 'author', 'contacts_name', 'telephone'];
         $query = self::equalQuery($field, $params);
         $query[] = self::betweenTimeQuery('start', 'end', $params, 'update_time');
+        $whereJSON = [];
         if(isset($params['provice']) && !empty($params['provice'])) {
-            $query[] = ['address->provice','=','山东省'];
+            $whereJSON[] = ['address->province','like', '%'.$params['provice'].'%'];
         }
 
         if(!empty($query)) {
@@ -87,9 +88,11 @@ class Customer extends BaseModel
         }
         list($start, $count) = paginate();
         $listData = new self();
-        $totalNums = $listData->where($query)->count();
-        $listData = $listData->limit($start, $count)
+        $totalNums = $listData->where($query)->where($whereJSON)->count();
+        $listData = $listData
+            ->limit($start, $count)
             ->where($query)
+            ->where($whereJSON)
             ->order(['create_time' => 'desc', 'id' => 'desc'])
             ->select();
         $result = [

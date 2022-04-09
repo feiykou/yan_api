@@ -123,9 +123,7 @@ class ExcelCustomer
                             } else{
                                 $cacheData[$mainCurKey] = $mainData[$mval];
                             }
-
                         }
-
                     }
                 }
                 else {
