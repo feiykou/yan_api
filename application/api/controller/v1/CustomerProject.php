@@ -148,7 +148,6 @@ class CustomerProject extends Base
         return writeJson(201, [], '更新成功');
     }
 
-
     /**
      * 删除信息
      * @param('ids','待删除的customer_project_id列表','require|array|min:1')
@@ -176,8 +175,4 @@ class CustomerProject extends Base
         Hook::listen('logger', '删除了id为' . implode(',', $ids) . '客户项目信息');
         return writeJson(201, [], '客户项目删除成功');
     }
-
-
-
-
 }

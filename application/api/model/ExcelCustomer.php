@@ -24,40 +24,43 @@ class ExcelCustomer
             'C' => "author",
             'D' => "user_code",
             'E' => "channel",
-            'F' => "address_0",
-            'G' => "address_1",
+            'F' => "province",
+            'G' => "city",
             'H' => "contacts_name",
             'I' => "telephone",
             'J' => "customer_type",
             'K' => "name",
             "customer_project" => [
                 'L' => "name",
-                'M' => "demand_desc",
-                'N' => "follow_count",
-                'O' => "reason",
-                'P' => "scene",
-                'Q' => "industry",
-                'R' => "product_type",
-                'S' => "product_spec",
-                'T' => "product_num",
-                'U' => "product_price",
-                'V' => "demand_bg",
-                'W' => "solution",
-                'X' => "install_solution",
-                'Y' => "product_lights",
-                'Z' => "custom_value",
-                'AA' => "follow_difficulty",
-                'AB' => "custom_feedback",
-                'AC' => "project_channel"
+                'M' => "follow_status",
+                'N' => "order_no",
+                'O' => "status_success_time",
+                'P' => "demand_desc",
+                'Q' => "follow_count",
+                'R' => "reason",
+                'S' => "scene",
+                'T' => "industry",
+                'U' => "product_type",
+                'V' => "product_spec",
+                'W' => "product_num",
+                'X' => "product_price",
+                'Y' => "demand_bg",
+                'Z' => "solution",
+                'AA' => "install_solution",
+                'AB' => "product_lights",
+                'AC' => "custom_value",
+                'AD' => "follow_difficulty",
+                'AE' => "custom_feedback",
+                'AF' => "project_channel"
             ],
             "customer_main" => [
-                'AD' => "main_name",
-                'AE' => "main_contacts",
-                'AF' => "main_tel",
-                'AG' => "address_0",
-                'AH' => "address_1",
-                'AI' => "address_2",
-                'AJ' => "main_spec_address"
+                'AG' => "main_name",
+                'AH' => "main_contacts",
+                'AI' => "main_tel",
+                'AJ' => "address_0",
+                'AK' => "address_1",
+                'AL' => "address_2",
+                'AM' => "main_spec_address"
             ]
         ];
         $excel_index = $proJect_index = 2;
@@ -67,18 +70,17 @@ class ExcelCustomer
             $projectData = [];
             foreach ($excelKeyData as $key => $let ) {
                 $curKey = $key . $excel_index;
-                if(is_string($let) && strstr($let, 'address')) {
-                    if(count($val['address']) == 0) {
-                        $cacheData[$curKey] = '';
-                    } else {
-                        $arr = explode('_',$let);
-                        $addressIndex = $arr[1];
-                        if(isset($val['address'][$addressIndex])) {
-                            $cacheData[$curKey] = $val['address'][$addressIndex]?:'';
-                        }else {
-                            $cacheData[$curKey] = '';
-                        }
+                if(is_string($let) && (strstr($let, 'province') || strstr($let, 'city'))) {
+                    $val['address'] = json_decode(json_encode($val['address']), true);
+                    var_dump($val['address']);
+
+                    if(strstr($let, 'province') && isset($val['address']['province']) ) {
+                        $cacheData[$curKey] = $val['address']['province'];
                     }
+                    if(strstr($let, 'city') && isset($val['address']['city']) ) {
+                        $cacheData[$curKey] = $val['address']['city'];
+                    }
+                    var_dump($cacheData);
                 } elseif ($key == 'customer_project') {
                     if(isset($val['customer_project']) && count($val['customer_project']) > 0) {
                         // 格式循环  $dataVal是project数据
