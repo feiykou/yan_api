@@ -102,10 +102,8 @@ class ExcelCustomer
             // 订单编码
             $followData[$key]['order_no'] = $datum['N'];
             // 成交时间
-            try {
+            if(!empty($datum['N'])) {
                 $datum['O'] = DateFormatter::format($datum['O'],'YYYY-m-d');
-            } catch (Exception $e) {
-                $datum['O'] = '';
             }
             $followData[$key]['status_success_time'] = $datum['O'];
             // 客户咨询/客户描述
@@ -224,8 +222,10 @@ class ExcelCustomer
             $insertData[$key]['content'] = $datum['O'].' | 客户需求：'.$datum['P'].' | 解决方案：'.$datum['Q'].' | 下次沟通内容：'.$datum['R'];
             $insertData[$key]['name'] = $datum['P'];
             // 咨询日期
-            $datum['N'] = DateFormatter::format($datum['N'],'YYYY-m-d');
-            $insertData[$key]['create_time'] = $datum['N'];
+            if(!empty($datum['N'])) {
+                $datum['N'] = DateFormatter::format($datum['N'],'YYYY-m-d');
+                $insertData[$key]['create_time'] = $datum['N'];
+            }
             $token = LoginToken::getInstance();
             $author = $datum['B'];
             if(empty($datum['B'])) {
