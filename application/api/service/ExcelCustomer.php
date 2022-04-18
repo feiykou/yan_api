@@ -74,6 +74,9 @@ class ExcelCustomer
             // 客户来源
             $insertData[$key]['channel'] = $datum['E'];
             // 地址
+            $datum['F'] = preg_replace('/\s+/u', '', $datum['F']);
+            $datum['G'] = preg_replace('/\s+/u', '', $datum['G']);
+
             if($datum['F']) {
                 if( !$datum['G'] ) $datum['G'] = '';
                 if(!strpos($datum['F'], '省')) $datum['F'] .= '省';
