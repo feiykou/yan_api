@@ -104,8 +104,8 @@ class ExcelCustomer
             // 成交时间
             if(!empty($datum['N'])) {
                 $datum['O'] = DateFormatter::format($datum['O'],'YYYY-m-d');
+                $followData[$key]['status_success_time'] = $datum['O'];
             }
-            $followData[$key]['status_success_time'] = $datum['O'];
             // 客户咨询/客户描述
             $followData[$key]['demand_desc'] = $datum['P'];
             // 跟进次数
