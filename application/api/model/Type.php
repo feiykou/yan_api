@@ -33,6 +33,7 @@ class Type extends BaseModel
         return $result;
     }
 
+
     /**
      * 获取设置并缓存
      * @param $name

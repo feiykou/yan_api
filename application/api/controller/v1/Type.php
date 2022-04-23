@@ -54,6 +54,7 @@ class Type extends Base
         return $result;
     }
 
+
     /**
      * 新建类型
      * @validate('TypeForm')
@@ -149,7 +150,14 @@ class Type extends Base
         foreach ($fieldArr as $field) {
             $data = Cache::get('type_'.$field);
             if(!$data) {
-                $data = TypeModel::where('field', $field)->find();
+                try {
+                    $data = TypeModel::where('field', $field)->find();
+                } catch (Exception $e) {
+                    throw new TypeException([
+                        'msg' => '类型获取失败',
+                        'error_code' => '50002'
+                    ]);
+                }
                 if($data) {
                     self::setTypeCache($field, $data);
                 }

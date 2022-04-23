@@ -6,9 +6,11 @@ namespace app\api\service;
 
 use app\api\controller\Base;
 use app\api\model\Customer;
+use app\api\controller\v1\Type as SettingType;
 use app\api\service\token\LoginToken;
 use LinCmsTp5\admin\model\LinUser;
 use LinCmsTp5\exception\BaseException;
+use phpDocumentor\Reflection\Type;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -22,6 +24,7 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat\DateFormatter;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use think\Exception;
 use think\facade\Env;
+use function foo\func;
 
 class ExcelCustomer
 {
@@ -37,17 +40,34 @@ class ExcelCustomer
         $followData = [];
         $mainData = [];
         $userNameArr = [];
+        try {
+            $typeData = (new SettingType())->getFieldValue('follow_status,status,channel');
+        } catch (Exception $e) {
+            $typeData = [];
+        }
+        if(!$typeData || count($typeData) == 0) {
+            throw new Exception('请先配置类型');
+        }
+        $typeJson = [];
+        foreach ($typeData as $item) {
+            $field = $item['field'];
+            $typeJson[$field] = $item['value'];
+        }
         foreach ($data as $key => $datum) {
             $linkIndex = $base->makeLinkIndex();
             // 连接编码
             $insertData[$key]['link_code'] = $linkIndex;
-            // 跟进状态
+            // 跟进状态  判断该状态是否在规定的状态
+            if(!in_array($datum['A'],$typeJson['follow_status'])) {
+                throw new Exception('客户跟进状态未配置');
+            }
             $insertData[$key]['follow_status'] = $datum['A'];
-            // 咨询日期
+            // 咨询日期  判断该日期是否符合要求
             try {
                 $datum['B'] = DateFormatter::format($datum['B'],'YYYY-m-d');
             } catch (Exception $e) {
-                $datum['B'] = date('y-m-d H:i:s', time());
+//                $datum['B'] = date('y-m-d H:i:s', time());
+                throw new Exception('咨询日期格式错误');
             }
             $insertData[$key]['create_time'] = $datum['B'];
             // 跟进业务员名和业务员id
@@ -71,12 +91,14 @@ class ExcelCustomer
             $code = json_decode($base->makeCustomerCode()->getContent(),true);
             $user_code = !empty($datum['D']) ? $datum['D'] : $code['code'];
             $insertData[$key]['user_code'] = $user_code;
-            // 客户来源
+            // 客户来源  判断客户来源
+            if(!in_array($datum['E'],$typeJson['channel'])) {
+                throw new Exception('客户来源未配置');
+            }
             $insertData[$key]['channel'] = $datum['E'];
             // 地址
             $datum['F'] = preg_replace('/\s+/u', '', $datum['F']);
             $datum['G'] = preg_replace('/\s+/u', '', $datum['G']);
-
             if($datum['F']) {
                 if( !$datum['G'] ) $datum['G'] = '';
                 if(!strpos($datum['F'], '省')) $datum['F'] .= '省';
@@ -101,17 +123,27 @@ class ExcelCustomer
             // 业务员id
             $followData[$key]['user_id'] = $user_id;
             $followData[$key]['name'] = $datum['L'];
+            if(!in_array($datum['M'],$typeJson['status'])) {
+                throw new Exception('项目跟进状态未配置');
+            }
             $followData[$key]['follow_status'] = $datum['M'];
             // 订单编码
             $followData[$key]['order_no'] = $datum['N'];
             // 成交时间
             if(!empty($datum['N'])) {
-                $datum['O'] = DateFormatter::format($datum['O'],'YYYY-m-d');
+                try{
+                    $datum['O'] = DateFormatter::format($datum['O'],'YYYY-m-d');
+                } catch (Exception $e) {
+                    throw new Exception('成交时间格式错误');
+                }
                 $followData[$key]['status_success_time'] = $datum['O'];
             }
             // 客户咨询/客户描述
             $followData[$key]['demand_desc'] = $datum['P'];
-            // 跟进次数
+            // 跟进次数  判断数字
+            if(!empty($datum['Q']) && !is_numeric($datum['Q'])) {
+                throw new Exception('跟进次数必须是数字');
+            }
             $followData[$key]['follow_count'] = $datum['Q'];
             // 丢单原因
             $followData[$key]['reason'] = $datum['R'];
@@ -143,7 +175,7 @@ class ExcelCustomer
             $followData[$key]['product_price'] = $datum['X'];
             // 客户名
             $followData[$key]['customer_name'] = $datum['K'];
-            // 项目来源
+            // 项目来源  判断项目来源
             $followData[$key]['project_channel'] = $datum['AF'];
 
 
