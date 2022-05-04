@@ -11,11 +11,15 @@ class CustomerForm extends BaseValidate
     protected $rule = [
         'name' => 'require',
         'contacts_name' => 'require',
-//        'telephone' => 'mobile',
+        'telephone' => 'unique:customer',
         'email' => 'email',
 //        'address' => 'require',
         'purpose' => 'require',
         'channel' => 'require'
+    ];
+
+    protected $message = [
+        'telephone' => '同一个客户不能重复录入'
     ];
 
     public function sceneEdit()
