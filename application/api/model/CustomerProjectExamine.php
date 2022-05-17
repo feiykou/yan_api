@@ -23,10 +23,11 @@ class CustomerProjectExamine extends BaseModel
      * 获取审核的项目
      * @return array
      */
-    public static function getPaginate($UID='')
+    public static function getPaginate($UID='', $status='')
     {
         $where = [];
         if(isset($UID) && !empty($UID)) $where['user_id'] = $UID;
+        if($status != '') $where['status'] = $status;
         list($start, $count) = paginate();
         $listData = new self();
         $totalNums = $listData->where($where)->count();

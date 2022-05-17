@@ -36,11 +36,17 @@ class ProjectExamine
 
     /**
      * 获取全部审核的项目
+     * @param('status','审核状态','number')
      * @auth('获取全部审核项目','客户项目管理')
      */
     public function getAllInfo()
     {
-        $result = CustomerProjectExamineModel::getPaginate();
+        $params = Request::get();
+        if(isset($params['status']) && in_array($params['status'], [0,1,2])) {
+            $result = CustomerProjectExamineModel::getPaginate('', $params['status']);
+        } else {
+            $result = CustomerProjectExamineModel::getPaginate();
+        }
         return $result;
     }
 
@@ -52,7 +58,12 @@ class ProjectExamine
     {
         $token = LoginToken::getInstance();
         $uid = $token->getCurrentUid();
-        $result = CustomerProjectExamineModel::getPaginate($uid);
+        $params = Request::get();
+        if(isset($params['status']) && in_array($params['status'], [0,1,2])) {
+            $result = CustomerProjectExamineModel::getPaginate($uid, $params['status']);
+        } else {
+            $result = CustomerProjectExamineModel::getPaginate($uid);
+        }
         return $result;
     }
 
