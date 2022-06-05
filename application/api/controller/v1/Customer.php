@@ -137,6 +137,7 @@ class Customer extends Base
         $params = Request::post();
         $params = $this->setAuthor($params);
         $token = LoginToken::getInstance();
+        // 创建客户管理员
         $params['original_user_id'] = $token->getCurrentUid();
         $code = json_decode($this->makeCustomerCode()->getContent(),true);
         $params['user_code'] = $code['code'];
@@ -317,12 +318,12 @@ class Customer extends Base
         $token = LoginToken::getInstance();
         // 主动指定把客户分配给谁
         if(isset($params['dicider_user']) && !empty($params['dicider_user'])) {
-            if($token->getCurrentUID() == $params['user_id']) {
-                $params['old_author'] = $token->getCurrentUserName();
-                $params['old_user_id'] = $token->getCurrentUID();
-                $params['author'] = $params['dicider_user']['name'];
-                $params['user_id'] = $params['dicider_user']['id'];
-            }
+//            if($token->getCurrentUID() == $params['user_id']) {
+            $params['old_author'] = $token->getCurrentUserName();
+            $params['old_user_id'] = $token->getCurrentUID();
+            $params['author'] = $params['dicider_user']['name'];
+            $params['user_id'] = $params['dicider_user']['id'];
+//            }
             unset($params['dicider_user']);
             return $params;
         }

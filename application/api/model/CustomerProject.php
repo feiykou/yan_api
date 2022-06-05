@@ -26,6 +26,10 @@ class CustomerProject extends BaseModel
         return $this->hasOne('customer_main','link_code', 'link_code');
     }
 
+    public function examine() {
+        return $this->hasOne('customer_project_examine', 'project_id', 'id');
+    }
+
     /**
      * 获取所有分页信息
      * @return array
@@ -75,6 +79,9 @@ class CustomerProject extends BaseModel
             'id' => $id
         ];
         $result = self::where($where)
+            ->with(['examine' => function($query) {
+                $query->field(['id', 'project_id', 'status']);
+            }])
             ->find();
         return $result;
     }
