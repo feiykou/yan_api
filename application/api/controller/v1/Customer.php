@@ -9,8 +9,6 @@ use app\api\model\Customer as CustomerModel;
 use app\api\model\CustomerAdd;
 use app\api\model\CustomerMain;
 use app\lib\exception\customer\CustomerException;
-use app\lib\token\Token;
-use LinCmsTp5\exception\BaseException;
 use think\Db;
 use think\Exception;
 use app\api\service\token\LoginToken;
@@ -151,7 +149,7 @@ class Customer extends Base
                 'error_code' => '51004'
             ]);
         }
-        return writeJson(201, [], '新增Customer成功');
+        return writeJson(201, $result['id'], '新增Customer成功');
     }
 
     /**

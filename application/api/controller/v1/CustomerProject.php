@@ -100,6 +100,7 @@ class CustomerProject extends Base
             }
             $params['customer_name'] = $customerInfo['name'];
             $params['user_code'] = $customerInfo['user_code'];
+            $params['customer_id'] = $customerInfo['id'];
         }
         if(isset($params['follow_status']) && !empty($params['follow_status'])) {
             if(strstr($params['follow_status'],config('setting.follow_status_examine'))) {

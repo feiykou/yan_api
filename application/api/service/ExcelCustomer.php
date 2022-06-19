@@ -90,6 +90,9 @@ class ExcelCustomer
             // 客户编号
             $code = json_decode($base->makeCustomerCode()->getContent(),true);
             $user_code = !empty($datum['D']) ? $datum['D'] : $code['code'];
+            if(!empty($datum['D'])) {
+                $insertData[$key]['id'] = $user_code;
+            }
             $insertData[$key]['user_code'] = $user_code;
             // 客户来源  判断客户来源
             if(!in_array($datum['E'],$typeJson['channel'])) {
