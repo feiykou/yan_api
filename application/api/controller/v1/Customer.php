@@ -37,6 +37,7 @@ class Customer extends Base
     /**
      * 获取全部Customer信息
      * @return array
+     * @auth('获取客户列表','客户管理')
      * @validate('CustomerFilter')
      * @throws \LinCmsTp5\exception\ParameterException
      */
@@ -56,6 +57,7 @@ class Customer extends Base
 
     /**
      * 获取公域池客户
+     * @auth('公域池列表','客户管理')
      * @return array
      * @throws \LinCmsTp5\exception\ParameterException
      */
@@ -125,6 +127,7 @@ class Customer extends Base
     /**
      * 创建Customer信息
      * @validate('CustomerForm')
+     * @auth('录入客户信息','客户管理')
      * @return \think\response\Json
      * @throws CustomerException
      */
@@ -155,6 +158,7 @@ class Customer extends Base
     /**
      * 更新Customer信息
      * @validate('CustomerForm.edit')
+     * @auth('编辑客户信息','客户管理')
      * @return \think\response\Json
      * @throws CustomerException
      */
@@ -356,5 +360,12 @@ class Customer extends Base
         }
     }
 
+    /**
+     * 对营销和业务人员设置权限：用户权限（仅录入客户信息和分配）
+     * @auth('仅录入客户信息和分配','客户管理')
+     */
+    public function setExtension() {
+
+    }
 
 }

@@ -21,6 +21,7 @@ class Type extends Base
     /**
      * 获取全部类型
      * @return mixed
+     * @auth('选项配置列表','配置')
      * @throws TypeException
      */
     public function getTypes()
@@ -57,6 +58,7 @@ class Type extends Base
 
     /**
      * 新建类型
+     * @auth('添加选项配置','配置')
      * @validate('TypeForm')
      * @return \think\response\Json
      */
@@ -76,6 +78,7 @@ class Type extends Base
 
     /**
      * 更新类型
+     * @auth('编辑选项配置','配置')
      * @validate('TypeForm.edit')
      * @return \think\response\Json
      */
@@ -110,7 +113,7 @@ class Type extends Base
     /**
      * 删除类型
      * @param('ids','待删除的类型id列表','require|array|min:1')
-     * @auth('删除类型','类型管理')
+     * @auth('删除选项配置','配置')
      * @return \think\response\Json
      */
     public function delType()
