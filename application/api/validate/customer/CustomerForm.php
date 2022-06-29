@@ -15,7 +15,7 @@ class CustomerForm extends BaseValidate
         'email' => 'email',
 //        'address' => 'require',
         'purpose' => 'require',
-        'channel' => 'require'
+//        'channel' => 'require'
     ];
 
     protected $message = [
