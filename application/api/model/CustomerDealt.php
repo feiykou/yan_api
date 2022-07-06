@@ -6,10 +6,9 @@ namespace app\api\model;
 
 use think\Db;
 use think\Exception;
-use think\migration\command\migrate\Rollback;
 use think\model\concern\SoftDelete;
 
-class Customer extends BaseModel
+class CustomerDealt extends BaseModel
 {
     use SoftDelete;
 
@@ -76,38 +75,16 @@ class Customer extends BaseModel
             }
         }
         if(empty($query)) $query = [];
-
-        if(isset($params['make_copy_user']) && $params['make_copy_user'] != '0' && $params['make_copy_user']) {
-            $make_copy_user = $params['make_copy_user'];
-            if(isset($params['type']) && $params['type']) {
-                if(intval($params['type']) == 1) {
-                    $condition = ['channel', '=', ''];
-                } else {
-                    $condition = ['channel', '<>', ''];
-                }
-                $query[] = $condition;
-            }
-            // 推广待办
-            if($make_copy_user > 0) {
-                // 管理员查看自己的
-                $query[] = ['make_copy_user','=',$make_copy_user];
-            } else if($make_copy_user == -1){
-                // 管理员可以查看所有的
-                $query[] = ['make_copy_user','<>',0];
-            }
+        if($uid && $uid > 0) {
+            $query[] = ['user_id','=',$uid];
         } else {
-            if($uid && $uid > 0) {
-                $query[] = ['user_id','=',$uid];
+            if($uid == -1) {
+                // 释放的客户
+                $query[] = ['user_id','<>',0];
             } else {
-                if($uid == -1) {
-                    // 释放的客户
-                    $query[] = ['user_id','<>',0];
-                } else {
-                    $query[] = ['user_id','=',0];
-                }
+                $query[] = ['user_id','=',0];
             }
         }
-
         list($start, $count) = paginate();
         $listData = new self();
         $totalNums = $listData->where($query)->where($whereJSON)->count();

@@ -9,6 +9,7 @@ use app\api\model\Customer as CustomerModel;
 use app\api\model\CustomerAdd;
 use app\api\model\CustomerMain;
 use app\lib\exception\customer\CustomerException;
+use LinCmsTp5\exception\BaseException;
 use think\Db;
 use think\Exception;
 use app\api\service\token\LoginToken;
@@ -366,6 +367,62 @@ class Customer extends Base
      */
     public function setExtension() {
 
+    }
+
+
+    /**
+     * 获取全部客户待办信息
+     * @validate('CustomerFilter')
+     * @auth('获取全部客户待办列表','客户管理')
+     */
+    public function getAllCustomerDealt() {
+        $params = Request::get();
+        $params['make_copy_user'] = -1;
+        $result = CustomerModel::getCustomerPaginate(-1,$params);
+        return $result;
+    }
+
+    /**
+     * 获取全部当前管理员待办信息
+     * @return array
+     * @auth('获取客户待办列表','客户管理')
+     * @validate('CustomerFilter')
+     * @throws \LinCmsTp5\exception\ParameterException
+     */
+    public function getCustomerDealts()
+    {
+        $token = LoginToken::getInstance();
+        $uid = $token->getCurrentUid();
+        $params = Request::get();
+        $params['make_copy_user'] = $uid;
+        if(isset($params['type']) && $params['type']) {
+            if(intval($params['type']) == 1) {
+                $params['channel'] = '';
+            }
+        }
+        $result = CustomerModel::getCustomerPaginate($uid,$params);
+        return $result;
+    }
+
+    /**
+     * 更新Customer信息
+     * @auth('编辑待办客户来源','客户管理')
+     * @param('id','客户id','require')
+     * @param('channel','客户来源','require')
+     * @return \think\response\Json
+     * @throws CustomerException
+     */
+    public function updateChannel()
+    {
+        $params = Request::put();
+        $result = CustomerModel::update(['id'=>$params['id'], 'channel'=> $params['channel']], [], true);
+        if (!$result) {
+            throw new CustomerException([
+                'msg' => '更新客户来源失败',
+                'error_code' => '51004'
+            ]);
+        }
+        return writeJson(201, [], '更新客户来源成功');
     }
 
 }

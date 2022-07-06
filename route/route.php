@@ -98,6 +98,13 @@ Route::group('', function () {
             // 根据link_code获取单个客户信息
             Route::get('link_code/:link_code', 'api/v1.Customer/getCustomerByLinkcode', ['link_code'=>'\d']);
         });
+        Route::group('customer_dealt',function (){
+            Route::get('', 'api/v1.Customer/getCustomerDealts');
+            // 查询所有客户日志
+            Route::get('all', 'api/v1.Customer/getAllCustomerDealt');
+            // 更新客户日志
+            Route::put('', 'api/v1.Customer/updateChannel');
+        });
         Route::group('customer_log',function (){
             // 查询当前管理员所有客户日志
             Route::get('', 'api/v1.CustomerLog/getCustomerLogs');
