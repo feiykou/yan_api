@@ -35,6 +35,15 @@ class Customer extends BaseModel
     }
 
     /**
+     * 客户待办一对多
+     * @return \think\model\relation\HasMany
+     */
+    public function customerDealt()
+    {
+        return $this->hasOne('customer_dealt', 'customer_id', 'id');
+    }
+
+    /**
      * 一对一
      * @return \think\model\relation\HasOne
      */
@@ -111,6 +120,10 @@ class Customer extends BaseModel
         list($start, $count) = paginate();
         $listData = new self();
         $totalNums = $listData->where($query)->where($whereJSON)->count();
+        // 如果是待办
+        if(array_key_exists('make_copy_user',$params)) {
+            $listData = $listData->with(['customerDealt']);
+        }
         $listData = $listData
             ->limit($start, $count)
             ->where($query)

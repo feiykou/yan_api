@@ -7,10 +7,12 @@ namespace app\api\controller\v1;
 use app\api\controller\Base;
 use app\api\model\Customer as CustomerModel;
 use app\api\model\CustomerAdd;
+use app\api\model\CustomerDealt;
 use app\api\model\CustomerMain;
 use app\lib\exception\customer\CustomerException;
 use LinCmsTp5\exception\BaseException;
 use think\Db;
+use think\db\Where;
 use think\Exception;
 use app\api\service\token\LoginToken;
 use think\facade\Hook;
@@ -415,13 +417,46 @@ class Customer extends Base
     public function updateChannel()
     {
         $params = Request::put();
-        $result = CustomerModel::update(['id'=>$params['id'], 'channel'=> $params['channel']], [], true);
-        if (!$result) {
+        Db::startTrans();
+        try {
+            $result = CustomerModel::update(['id'=>$params['id'], 'channel'=> $params['channel']], [], true);
+            if (!$result) {
+                throw new CustomerException([
+                    'msg' => '更新客户来源失败',
+                    'error_code' => '51004'
+                ]);
+            }
+            if(array_key_exists('dealt_img_urls', $params)) {
+                $token = LoginToken::getInstance();
+                $uid = $token->getCurrentUid();
+                $saveData = [
+                    'customer_id' => $result['id'],
+                    'user_id' => $uid,
+                    'img_urls' => $params['dealt_img_urls']
+                ];
+                if(array_key_exists('dealt_id', $params)) {
+                    $saveData['id'] = $params['dealt_id'];
+                    CustomerDealt::update($saveData);
+                } else {
+                    CustomerDealt::create($saveData);
+                }
+
+            } else {
+                if(array_key_exists('dealt_id', $params)) {
+                    CustomerDealt::destroy($params['dealt_id']);
+                }
+            }
+
+            Db::commit();
+        } catch (Exception $e) {
+            Db::rollback();
             throw new CustomerException([
                 'msg' => '更新客户来源失败',
                 'error_code' => '51004'
             ]);
         }
+
+
         return writeJson(201, [], '更新客户来源成功');
     }
 
