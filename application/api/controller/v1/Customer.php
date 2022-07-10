@@ -139,7 +139,7 @@ class Customer extends Base
         // 检测公司客户是否超过20个
         $this->isAddCustomer();
         $params = Request::post();
-        $params = $this->setAuthor($params);
+        $params = $this->setAuthor($params, 'add');
         $token = LoginToken::getInstance();
         // 创建客户管理员
         $params['original_user_id'] = $token->getCurrentUid();
@@ -317,8 +317,8 @@ class Customer extends Base
         ]);
     }
 
-    // 设置进入公域池
-    private function setAuthor($params=[])
+    // 设置进入公域池  type:是否是创建
+    private function setAuthor($params=[], $type='')
     {
         $token = LoginToken::getInstance();
         // 主动指定把客户分配给谁
@@ -339,9 +339,17 @@ class Customer extends Base
             $params['author'] = '';
             $params['user_id'] = 0;
         } else {
-            // 设置当前写入客户的id
-            $params['author'] = $token->getCurrentUserName();
-            $params['user_id'] = $token->getCurrentUID();
+            if($token->getCurrentUserName() !== 'super') {
+                // 设置当前写入客户的id
+                $params['author'] = $token->getCurrentUserName();
+                $params['user_id'] = $token->getCurrentUID();
+            }
+            // 如果是super，在type时添加
+            if($token->getCurrentUserName() === 'super' && $type == 'add') {
+                // 设置当前写入客户的id
+                $params['author'] = $token->getCurrentUserName();
+                $params['user_id'] = $token->getCurrentUID();
+            }
         }
         return $params;
     }

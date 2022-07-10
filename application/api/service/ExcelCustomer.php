@@ -7,6 +7,7 @@ namespace app\api\service;
 use app\api\controller\Base;
 use app\api\model\Customer;
 use app\api\controller\v1\Type as SettingType;
+use app\api\model\CustomerProject;
 use app\api\service\token\LoginToken;
 use LinCmsTp5\admin\model\LinUser;
 use LinCmsTp5\exception\BaseException;
@@ -232,42 +233,67 @@ class ExcelCustomer
         $base = new Base();
         $data = self::commonImportData(2);
         if(!$data) {
-            return writeJson(201, [], '导入失败');
+//            return writeJson(201, [], '导入失败');
+            throw new Exception('导入失败，内容不能为空');
         }
         $insertData = []; // excel解析后数据
         $userNameArr = []; // 管理员名称数组
         $customerArr = []; // 客户编码数组
         $customerIDArr = [];
+        $customerProjectIDArr = [];
+        $projectArr = []; // 项目数据
+
 
         foreach ($data as $key => $val) {
             array_push($customerArr, $val['D']);
+            if(!empty($val['M'])){
+                array_push($projectArr, $val['M']);
+            }
         }
-        $customerIDs = Customer::where('user_code', 'in', $customerArr)
+        $customerIDs = Customer::where('id', 'in', $customerArr)
             ->field(['user_code','id'])
             ->select()
             ->toArray();
+        $customerProjectIDs = CustomerProject::where('id', 'in', $projectArr)
+            ->field(['customer_id','id'])
+            ->select()
+            ->toArray();
+
+
+        if(count($customerIDs) !== count($data)) {
+            throw new Exception('存在客户编码错误的行，请及时检查后导入');
+        }
+        // 项目
+        if(count($customerProjectIDs) > 0) {
+            foreach ($customerProjectIDs as $datas) {
+                $customerProjectIDArr[$datas['id']] = [
+                    'id' => $datas['id'],
+                    'customer_id' => $datas['customer_id']
+                ];
+            }
+        }
         if(count($customerIDs) > 0) {
             foreach ($customerIDs as $datas) {
-                $customerIDArr[$datas['user_code']] = $datas['id'];
+                $customerIDArr[$datas['id']] = $datas['id'];
             }
+        } else {
+            throw new Exception('不存在客户编码，请填入客户编码');
         }
         foreach ($data as $key => $datum) {
             // 项目编码
             $insertData[$key]['user_code'] = $datum['D'];
             // 跟进状态
-            $insertData[$key]['status'] = $datum['A'];
-            $insertData[$key]['author'] = $datum['B'];
-            $insertData[$key]['content'] = $datum['O'].' | 客户需求：'.$datum['P'].' | 解决方案：'.$datum['Q'].' | 下次沟通内容：'.$datum['R'];
-            $insertData[$key]['name'] = $datum['P'];
-            // 咨询日期
-            if(!empty($datum['N'])) {
-                $datum['N'] = DateFormatter::format($datum['N'],'YYYY-m-d');
-                $insertData[$key]['create_time'] = $datum['N'];
+            if($datum['A']) {
+                $insertData[$key]['status'] = $datum['A'];
+            } else {
+                throw new Exception('客户日志状态不能为空');
             }
-            $token = LoginToken::getInstance();
+
             $author = $datum['B'];
-            if(empty($datum['B'])) {
-                $author = $token->getCurrentUserName();
+            if(empty($author)) {
+                throw new Exception('请填写正确的业务员信息');
+            } else {
+                $insertData[$key]['author'] = $datum['B'];
             }
             // 业务员id
             $searVal = array_search($author, $userNameArr);
@@ -281,8 +307,39 @@ class ExcelCustomer
             if(isset($customerIDArr[$datum['D']]) && !empty($customerIDArr[$datum['D']])) {
                 $insertData[$key]['customer_id'] =  $customerIDArr[$datum['D']];
             }else {
-                $insertData[$key]['customer_id'] = 0;
+                throw new Exception('客户编码填写有误，请检查');
             };
+
+            if(count($projectArr) !== count($customerProjectIDs)) {
+                throw new Exception('存在项目不存在，请及时检查后导入');
+            }
+            // 判断项目
+            if(!empty($datum['M'])) {
+                if(isset($customerProjectIDArr[$datum['M']]) && !empty($customerProjectIDArr[$datum['M']])) {
+                    $curProjectData = $customerProjectIDArr[$datum['M']];
+                    if($curProjectData['customer_id'] == $insertData[$key]['customer_id']) {
+                        $insertData[$key]['project_id'] = $curProjectData['id'];
+                    } else {
+                        throw new Exception('项目和客户不一致，请及时检查后导入');
+                    }
+                }
+            }
+
+            // 咨询日期
+            if(!empty($datum['N'])) {
+                try{
+                    $datum['N'] = DateFormatter::format($datum['N'],'YYYY-m-d');
+                } catch (Exception $e) {
+                    throw new Exception('沟通时间格式错误');
+                }
+                $insertData[$key]['create_time'] = $datum['N'];
+            }
+            $insertData[$key]['content'] = $datum['O'].' | 客户需求：'.$datum['P'].' | 解决方案：'.$datum['Q'].' | 下次沟通内容：'.$datum['R'];
+            // 客户需求
+            if(empty($datum['P'])) {
+                throw new Exception('客户需求不能为空');
+            }
+            $insertData[$key]['name'] = $datum['P'];
         }
         return [
             'log' => $insertData
