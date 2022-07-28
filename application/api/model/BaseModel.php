@@ -74,6 +74,22 @@ class BaseModel extends Model
         return $value;
     }
 
+    protected function setMultiFilePrefix($value, $host = '')
+    {
+        if(empty($value) || !is_array($value)) {
+            return;
+        }
+        foreach ($value as $k => &$v) {
+            if(is_object($v)) $v = (array)$v;
+            if(!is_array($v)) {
+                $v = $this->setImgPrefix($v, $host);
+            } else {
+                $v['path'] = $this->setImgPrefix($v['path'], $host);
+            }
+        }
+        return $value;
+    }
+
     protected function cancelMultiImgPrefix($value)
     {
         if(empty($value) || !is_array($value)) {

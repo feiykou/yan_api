@@ -12,13 +12,19 @@ class CustomerLog extends BaseModel
 
     protected $autoWriteTimestamp = 'datetime';
     protected $deleteTime = 'delete_time';
-    protected $json = ['address', 'img_urls'];
+    protected $json = ['address', 'img_urls','file_urls'];
 
     // 设置spu_detail_img_list多图片链接
     protected function getImgUrlsAttr($value)
     {
         if(!$value) return;
         return $this->setMultiImgPrefix($value);
+    }
+    // 文件前缀
+    protected function getFileUrlsAttr($value)
+    {
+        if(!$value) return;
+        return $this->setMultiFilePrefix($value);
     }
 
     // 设置spu_detail_img_list多图片链接

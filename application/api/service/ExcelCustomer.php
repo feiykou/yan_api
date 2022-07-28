@@ -50,6 +50,7 @@ class ExcelCustomer
             throw new Exception('请先配置类型');
         }
         $typeJson = [];
+        $userCodeArr = []; // 获取excel用户编码
         foreach ($typeData as $item) {
             $field = $item['field'];
             $typeJson[$field] = $item['value'];
@@ -93,6 +94,7 @@ class ExcelCustomer
             $user_code = !empty($datum['D']) ? $datum['D'] : $code['code'];
             if(!empty($datum['D'])) {
                 $insertData[$key]['id'] = $user_code;
+                array_push($userCodeArr, $user_code);
             }
             $insertData[$key]['user_code'] = $user_code;
             // 客户来源  判断客户来源
@@ -221,6 +223,7 @@ class ExcelCustomer
                 $mainData[$key]['main_spec_address'] = '';
             }
         }
+        self::getCustomers($userCodeArr);
         return [
             'customer' => $insertData,
             'follow' => $followData,
@@ -699,4 +702,17 @@ class ExcelCustomer
         }
         return $id;
     }
+
+    public static function getCustomers($ids=[]){
+        $result = Customer::withTrashed()->field('id')->select($ids)->toArray();
+
+        if(count($result) > 0) {
+            $arr = [];
+            foreach ($result as $item) {
+                array_push($arr, $item['id']);
+            }
+            throw new Exception(implode('&',$arr).'编码的客户已存在，请勿重复上传');
+        }
+    }
+
 }

@@ -31,7 +31,7 @@ class Customer extends Base
         // type==1  3天未跟进数据
         if(isset($params['type']) && $params['type'] == 1){
             $result = CustomerModel::passNoFollowData(-1, $params);
-        }else {
+        } else {
             $result = CustomerModel::getCustomerPaginate(-1,$params);
         }
         return $result;
