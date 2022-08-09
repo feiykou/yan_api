@@ -59,10 +59,10 @@ class ExcelCustomer
             $linkIndex = $base->makeLinkIndex();
             // 连接编码
             $insertData[$key]['link_code'] = $linkIndex;
-            // 跟进状态  判断该状态是否在规定的状态
-            if(!in_array($datum['A'],$typeJson['follow_status'])) {
-                throw new Exception('客户跟进状态未配置');
-            }
+            // 跟进状态  判断该状态是否在规定的状态   上传可不配置
+//            if(!in_array($datum['A'],$typeJson['follow_status'])) {
+//                throw new Exception('客户跟进状态未配置');
+//            }
             $insertData[$key]['follow_status'] = $datum['A'];
             // 咨询日期  判断该日期是否符合要求
             try {
@@ -129,9 +129,10 @@ class ExcelCustomer
             // 业务员id
             $followData[$key]['user_id'] = $user_id;
             $followData[$key]['name'] = $datum['L'];
-            if(!in_array($datum['M'],$typeJson['status'])) {
-                throw new Exception('项目跟进状态未配置');
-            }
+            // 项目状态
+//            if(!in_array($datum['M'],$typeJson['status'])) {
+//                throw new Exception('项目跟进状态未配置');
+//            }
             $followData[$key]['follow_status'] = $datum['M'];
             // 订单编码
             $followData[$key]['order_no'] = $datum['N'];
