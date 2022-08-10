@@ -119,17 +119,31 @@ class Customer extends BaseModel
 
         list($start, $count) = paginate();
         $listData = new self();
-        $totalNums = $listData->where($query)->where($whereJSON)->count();
+
         // 如果是待办
         if(array_key_exists('make_copy_user',$params)) {
             $listData = $listData->with(['customerDealt']);
         }
-        $listData = $listData
-            ->limit($start, $count)
-            ->where($query)
-            ->where($whereJSON)
-            ->order(['create_time' => 'desc', 'id' => 'desc'])
-            ->select();
+        // 软删除  0:要查询软删除
+        if(isset($params['soft_del']) && $params['soft_del'] == 0) {
+            $totalNums = $listData->onlyTrashed()->where($query)->where($whereJSON)->count();
+            $listData = $listData
+                ->onlyTrashed()
+                ->limit($start, $count)
+                ->where($query)
+                ->where($whereJSON)
+                ->order(['create_time' => 'desc', 'id' => 'desc'])
+                ->select();
+        } else {
+            $totalNums = $listData->where($query)->where($whereJSON)->count();
+            $listData = $listData
+                ->limit($start, $count)
+                ->where($query)
+                ->where($whereJSON)
+                ->order(['create_time' => 'desc', 'id' => 'desc'])
+                ->select();
+        }
+
         $result = [
             // 查询结果
             'collection' => $listData,

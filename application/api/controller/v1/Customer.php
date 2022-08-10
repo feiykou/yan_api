@@ -187,23 +187,34 @@ class Customer extends Base
      */
     public function delete()
     {
-        $ids = Request::delete('ids');
+        $params = Request::delete();
+        $ids = $params['ids'];
+        $softDel = [$params['soft_del']];
         Db::startTrans();
-        array_map(function ($id) {
-            $customer = CustomerModel::get($id);
+        array_map(function ($id, $softDel) {
+            if($softDel == 0) {
+                $customer = CustomerModel::withTrashed()->find($id);
+            } else {
+                $customer = CustomerModel::get($id);
+            }
+
             if(!$customer) {
                 throw new CustomerException([
                     'msg' => 'id为' . $id . 'Customer不存在'
                 ]);
             }
             try{
-                $customer->delete();
+                if($softDel == 0) {
+                    $customer->delete(true);
+                } else {
+                    $customer->delete();
+                }
                 Db::commit();
             } catch (Exception $e) {
                 Db::rollback();
             }
 
-        }, $ids);
+        }, $ids, $softDel);
         Hook::listen('logger', '删除了id为' . implode(',', $ids) . 'Customer信息');
         return writeJson(201, [], 'Customer删除成功');
     }
@@ -466,6 +477,28 @@ class Customer extends Base
 
 
         return writeJson(201, [], '更新客户来源成功');
+    }
+
+    /**
+     * 恢复客户信息
+     * @param('id','客户id','require')
+     */
+    public function recycleCustomer($id) {
+        $result = CustomerModel::withTrashed()->where('id','=',$id)->update(['delete_time' => null]);
+//        var_dump($result);
+//        if(!$customer) {
+//            throw new CustomerException([
+//                'msg' => 'id为' . $id . 'Customer不存在'
+//            ]);
+//        }
+//        $result = $customer->update(['delete_time' => '']);
+        if (!$result) {
+            throw new CustomerException([
+                'msg' => '恢复Customer失败',
+                'error_code' => '51004'
+            ]);
+        }
+        return writeJson(201, [], '恢复Customer成功');
     }
 
 }

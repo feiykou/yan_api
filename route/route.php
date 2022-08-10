@@ -91,6 +91,8 @@ Route::group('', function () {
             Route::put('follow', 'api/v1.Customer/followUpdate');
             // 创建，更新跟进
             Route::put('main', 'api/v1.Customer/MainUpdate');
+            // 恢复客户信息
+            Route::put('recycleC', 'api/v1.Customer/recycleCustomer');
             // 更新客户
             Route::put(':id', 'api/v1.Customer/update', ['id'=>'\d']);
             // 删除客户

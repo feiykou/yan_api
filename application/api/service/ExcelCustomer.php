@@ -91,15 +91,20 @@ class ExcelCustomer
             $insertData[$key]['user_id'] = $user_id;
             // 客户编号
             $code = json_decode($base->makeCustomerCode()->getContent(),true);
-            $user_code = !empty($datum['D']) ? $datum['D'] : $code['code'];
-            if(!empty($datum['D'])) {
+            $user_code = !empty($datum['D']) ? trim($datum['D']) : '';
+            if($user_code) {
                 $insertData[$key]['id'] = $user_code;
                 array_push($userCodeArr, $user_code);
+            } else {
+                throw new Exception('客户编码不能为空');
             }
             $insertData[$key]['user_code'] = $user_code;
             // 客户来源  判断客户来源
-            if(!in_array($datum['E'],$typeJson['channel'])) {
-                throw new Exception('客户来源未配置');
+            if(!empty($datum['E'])) {
+//                var_dump($datum['E']);
+                if(!in_array($datum['E'],$typeJson['channel'])) {
+                    throw new Exception('客户来源未配置');
+                }
             }
             $insertData[$key]['channel'] = $datum['E'];
             // 地址
