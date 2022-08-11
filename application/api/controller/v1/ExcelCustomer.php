@@ -58,24 +58,26 @@ class ExcelCustomer extends Base
      */
     public function exportCustomer($ids)
     {
-        $ids = Request::get('ids');
-        try {
-            if(empty($ids))  throw new Exception('参数必须填写');
-            $ids = explode(',', $ids);
-            $mark = true;
-            foreach ($ids as $num) {
-                if(!is_numeric($num)) {
-                    $mark = false;
-                }
-            }
-            if(!$mark) throw new Exception('参数必须是数字');
-        } catch (Exception $e) {
-            throw new ExcelCustomerException([
-                'msg' => $e->getMessage()
-            ]);
-        }
+//        $ids = Request::get('ids');
+//        try {
+//            if(empty($ids))  throw new Exception('参数必须填写');
+//            $ids = explode(',', $ids);
+//            $mark = true;
+//            foreach ($ids as $num) {
+//                if(!is_numeric($num)) {
+//                    $mark = false;
+//                }
+//            }
+//            if(!$mark) throw new Exception('参数必须是数字');
+//        } catch (Exception $e) {
+//            throw new ExcelCustomerException([
+//                'msg' => $e->getMessage()
+//            ]);
+//        }
+        $params = Request::get('params');
+//        var_dump($params);
         // 导出数据
-        $data = Customer::getCustomerAndProject($ids)->toArray();
+        $data = Customer::getCustomerAndProject($params)->toArray();
         $result = $this->exportCustomerExcelInfo($data);
         if(!$result) {
             return writeJson(201, [], '导入失败');

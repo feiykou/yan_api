@@ -330,11 +330,28 @@ class Customer extends BaseModel
      * @return false|\PDOStatement|string|\think\Collection|\think\db\Query[]|\think\model\Collection
      * @throws \think\Exception\DbException
      */
-    public static function getCustomerAndProject($ids=[])
+    public static function getCustomerAndProject($params)
     {
+        $field = ['name', 'follow_status', 'id', 'author', 'contacts_name', 'telephone'];
+        $query = self::equalQuery($field, $params);
+        $query[] = self::betweenTimeQuery('start', 'end', $params, 'update_time');
+        $whereJSON = [];
+        if(isset($params['provice']) && !empty($params['provice'])) {
+            $whereJSON[] = ['address->province','like', '%'.$params['provice'].'%'];
+        }
+
+        if(!empty($query)) {
+            foreach ($query as $key => $val) {
+                if(isset($val) && empty($val)) {
+                    unset($query[$key]);
+                }
+            }
+        }
+        if(empty($query)) $query = [];
         $result = self::with(['customerMain', 'customerProject'])
+            ->where($query)
             ->order('id', 'desc')
-            ->all($ids);
+            ->select();
         return $result;
     }
 

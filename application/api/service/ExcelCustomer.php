@@ -72,6 +72,7 @@ class ExcelCustomer
                 throw new Exception('咨询日期格式错误');
             }
             $insertData[$key]['create_time'] = $datum['B'];
+            $insertData[$key]['update_time'] = $datum['B'];
             // 跟进业务员名和业务员id
             $token = LoginToken::getInstance();
             $author = $datum['C'];
@@ -131,6 +132,8 @@ class ExcelCustomer
             // 连接编码
             $followData[$key]['link_code'] = $linkIndex;
             $followData[$key]['user_code'] = $user_code;
+            $followData[$key]['customer_id'] = $user_code;
+
             // 业务员id
             $followData[$key]['user_id'] = $user_id;
             $followData[$key]['name'] = $datum['L'];
