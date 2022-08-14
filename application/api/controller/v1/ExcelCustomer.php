@@ -53,10 +53,9 @@ class ExcelCustomer extends Base
 
     /**
      * 导出excel
-     * @param('ids','客户id','require')
      * @return \think\response\Json
      */
-    public function exportCustomer($ids)
+    public function exportCustomer()
     {
 //        $ids = Request::get('ids');
 //        try {
@@ -75,7 +74,12 @@ class ExcelCustomer extends Base
 //            ]);
 //        }
         $params = Request::get('params');
-//        var_dump($params);
+        if(!isset($params) || !$params) {
+            $params = [];
+        } else {
+            $params = urldecode($params);
+            $params = json_decode($params, true);
+        }
         // 导出数据
         $data = Customer::getCustomerAndProject($params)->toArray();
         $result = $this->exportCustomerExcelInfo($data);
