@@ -159,10 +159,11 @@ class ExcelCustomer
             'J' => "telephone",
             'K' => "null",
             'L' => "null",
-            'M' => "project_name",
-            'N' => "create_time",
-            'O' => "content",
-            'P' => "name"
+            'M' => "project_id",
+            'N' => "project_name",
+            'O' => "create_time",
+            'P' => "content",
+            'Q' => "name",
         ];
         $excel_index = 2;
         foreach ($data as $index => $val) {

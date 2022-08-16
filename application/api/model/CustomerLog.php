@@ -165,11 +165,24 @@ class CustomerLog extends BaseModel
      * 获取客户日志信息
      * @param array $ids
      */
-    public static function getCustomerLogAndCustomer($ids=[])
+    public static function getCustomerLogAndCustomer($params=[])
     {
+        $field = ['status', 'author'];
+        $query = self::equalQuery($field, $params);
+        $query[] = self::betweenTimeQuery('start', 'end', $params,'update_time');
+        if(!empty($query)) {
+            foreach ($query as $key => $val) {
+                if(isset($val) && empty($val)) {
+                    unset($query[$key]);
+                }
+            }
+        }
+        if(empty($query)) $query = [];
+        if(isset($params['user_code']) && !empty($params['user_code'])) $query[] = ['user_code', '=', $params['user_code']];
         $result = self::with(['customer', 'customerProject'])
+            ->where($query)
             ->order('id', 'desc')
-            ->all($ids);
+            ->select();
         return $result;
     }
 }

@@ -199,30 +199,29 @@ class ExcelCustomer extends Base
 
     /**
      * 导出客户日志excel
-     * @param('ids','客户id','require')
      * @return \think\response\Json
      */
-    public function exportCustomerLog($ids)
+    public function exportCustomerLog()
     {
-        $ids = Request::get('ids');
-        try {
-            if(empty($ids))  throw new Exception('参数必须填写');
-            $ids = explode(',', $ids);
-            $mark = true;
-            foreach ($ids as $num) {
-                if(!is_numeric($num)) {
-                    $mark = false;
-                }
-            }
-            if(!$mark) throw new Exception('参数必须是数字');
-        } catch (Exception $e) {
-            throw new ExcelCustomerException([
-                'msg' => $e->getMessage()
-            ]);
-        }
+//        $ids = Request::get('ids');
+//        try {
+//            if(empty($ids))  throw new Exception('参数必须填写');
+//            $ids = explode(',', $ids);
+//            $mark = true;
+//            foreach ($ids as $num) {
+//                if(!is_numeric($num)) {
+//                    $mark = false;
+//                }
+//            }
+//            if(!$mark) throw new Exception('参数必须是数字');
+//        } catch (Exception $e) {
+//            throw new ExcelCustomerException([
+//                'msg' => $e->getMessage()
+//            ]);
+//        }
 
-        $cellName=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'];
-        $headData = ['状态','业务','来源','客户编号','客户名称','省市','市','区','联系人','电话','客户类型','客户行业','项目','沟通时间','沟通内容','客户需求'];
+        $cellName=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'];
+        $headData = ['状态','业务','来源','客户编号','客户名称','省市','市','区','联系人','电话','客户类型','客户行业','项目id','项目名','沟通时间','沟通内容','客户需求'];
         $sheetHeader = []; // 表头
         $setBgCell = []; // 设置指定单元格背景颜色
         $cellWidth = [];
@@ -237,7 +236,14 @@ class ExcelCustomer extends Base
             'J' => 20, 'L' => 20, 'N' => 20, 'O' => 40, 'P' => 40
         ]);
         // 导出数据
-        $data = CustomerLog::getCustomerLogAndCustomer($ids)->toArray();
+        $params = Request::get('params');
+        if(!isset($params) || !$params) {
+            $params = [];
+        } else {
+            $params = urldecode($params);
+            $params = json_decode($params, true);
+        }
+        $data = CustomerLog::getCustomerLogAndCustomer($params)->toArray();
         $excelFormatData = ExcelCustomerModel::handleLogExportData($data);
         array_unshift($excelFormatData, $sheetHeader);
         $result = ExcelCustomerService::exportExcel($excelFormatData,'客户日志模板', [

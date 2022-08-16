@@ -258,6 +258,8 @@ class ExcelCustomer
 
         foreach ($data as $key => $val) {
             array_push($customerArr, $val['D']);
+            $customerArr = array_unique($customerArr);
+
             if(!empty($val['M'])){
                 array_push($projectArr, $val['M']);
             }
@@ -271,8 +273,7 @@ class ExcelCustomer
             ->select()
             ->toArray();
 
-
-        if(count($customerIDs) !== count($data)) {
+        if(count($customerIDs) !== count($customerArr)) {
             throw new Exception('存在客户编码错误的行，请及时检查后导入');
         }
         // 项目
@@ -338,20 +339,20 @@ class ExcelCustomer
             }
 
             // 咨询日期
-            if(!empty($datum['N'])) {
+            if(!empty($datum['O'])) {
                 try{
-                    $datum['N'] = DateFormatter::format($datum['N'],'YYYY-m-d');
+                    $datum['O'] = DateFormatter::format($datum['O'],'YYYY-m-d');
                 } catch (Exception $e) {
                     throw new Exception('沟通时间格式错误');
                 }
-                $insertData[$key]['create_time'] = $datum['N'];
+                $insertData[$key]['create_time'] = $datum['O'];
             }
-            $insertData[$key]['content'] = $datum['O'].' | 客户需求：'.$datum['P'].' | 解决方案：'.$datum['Q'].' | 下次沟通内容：'.$datum['R'];
+            $insertData[$key]['content'] = $datum['P'].' | 客户需求：'.$datum['Q'].' | 解决方案：'.$datum['R'].' | 下次沟通内容：'.$datum['S'];
             // 客户需求
-            if(empty($datum['P'])) {
+            if(empty($datum['Q'])) {
                 throw new Exception('客户需求不能为空');
             }
-            $insertData[$key]['name'] = $datum['P'];
+            $insertData[$key]['name'] = $datum['Q'];
         }
         return [
             'log' => $insertData
