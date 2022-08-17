@@ -346,6 +346,7 @@ class ExcelCustomer
                     throw new Exception('沟通时间格式错误');
                 }
                 $insertData[$key]['create_time'] = $datum['O'];
+                $insertData[$key]['update_time'] = $datum['O'];
             }
             $insertData[$key]['content'] = $datum['P'].' | 客户需求：'.$datum['Q'].' | 解决方案：'.$datum['R'].' | 下次沟通内容：'.$datum['S'];
             // 客户需求
