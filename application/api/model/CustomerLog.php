@@ -165,7 +165,7 @@ class CustomerLog extends BaseModel
      * 获取客户日志信息
      * @param array $ids
      */
-    public static function getCustomerLogAndCustomer($params=[])
+    public static function getCustomerLogAndCustomer($uid=0,$params=[])
     {
         $field = ['status', 'author'];
         $query = self::equalQuery($field, $params);
@@ -178,6 +178,9 @@ class CustomerLog extends BaseModel
             }
         }
         if(empty($query)) $query = [];
+        if($uid && $uid > 0) {
+            $query[] = ['user_id','=',$uid];
+        }
         if(isset($params['user_code']) && !empty($params['user_code'])) $query[] = ['user_code', '=', $params['user_code']];
         $result = self::with(['customer', 'customerProject'])
             ->where($query)

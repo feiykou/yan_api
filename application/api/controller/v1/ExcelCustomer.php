@@ -8,6 +8,7 @@ use app\api\model\CustomerProject;
 use app\api\model\CustomerMain;
 use app\api\model\Customer;
 use app\api\model\CustomerLog;
+use app\api\service\token\LoginToken;
 use app\lib\exception\excel_customer\ExcelCustomerException;
 use LinCmsTp5\exception\BaseException;
 use think\Db;
@@ -198,10 +199,47 @@ class ExcelCustomer extends Base
     }
 
     /**
+     * 导出全部日志数据
+     * @auth('导出全部日志','客户日志管理')
+     * @return \think\response\Json
+     */
+    public function exportAllCustomerLog() {
+        // 导出数据
+        $params = Request::get('params');
+        if(!isset($params) || !$params) {
+            $params = [];
+        } else {
+            $params = urldecode($params);
+            $params = json_decode($params, true);
+        }
+        $data = CustomerLog::getCustomerLogAndCustomer(-1,$params)->toArray();
+        return $this->exportCommonCustomerLog($data);
+    }
+
+    /**
+     * 导出当前管理员日志数据
+     * @return \think\response\Json
+     */
+    public function exportCustomerLog() {
+        // 导出数据
+        $params = Request::get('params');
+        if(!isset($params) || !$params) {
+            $params = [];
+        } else {
+            $params = urldecode($params);
+            $params = json_decode($params, true);
+        }
+        $token = LoginToken::getInstance();
+        $uid = $token->getCurrentUid();
+        $data = CustomerLog::getCustomerLogAndCustomer($uid,$params)->toArray();
+        return $this->exportCommonCustomerLog($data);
+    }
+
+    /**
      * 导出客户日志excel
      * @return \think\response\Json
      */
-    public function exportCustomerLog()
+    public function exportCommonCustomerLog($data)
     {
 //        $ids = Request::get('ids');
 //        try {
@@ -235,15 +273,7 @@ class ExcelCustomer extends Base
         $cellWidth = array_merge($cellWidth,[
             'J' => 20, 'L' => 20, 'N' => 20, 'O' => 40, 'P' => 40
         ]);
-        // 导出数据
-        $params = Request::get('params');
-        if(!isset($params) || !$params) {
-            $params = [];
-        } else {
-            $params = urldecode($params);
-            $params = json_decode($params, true);
-        }
-        $data = CustomerLog::getCustomerLogAndCustomer($params)->toArray();
+
         $excelFormatData = ExcelCustomerModel::handleLogExportData($data);
         array_unshift($excelFormatData, $sheetHeader);
         $result = ExcelCustomerService::exportExcel($excelFormatData,'客户日志模板', [
