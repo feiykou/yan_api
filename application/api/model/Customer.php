@@ -330,7 +330,7 @@ class Customer extends BaseModel
      * @return false|\PDOStatement|string|\think\Collection|\think\db\Query[]|\think\model\Collection
      * @throws \think\Exception\DbException
      */
-    public static function getCustomerAndProject($params)
+    public static function getCustomerAndProject($uid=0,$params)
     {
         $field = ['name', 'follow_status', 'id', 'author', 'contacts_name', 'telephone'];
         $query = self::equalQuery($field, $params);
@@ -348,6 +348,9 @@ class Customer extends BaseModel
             }
         }
         if(empty($query)) $query = [];
+        if($uid && $uid > 0) {
+            $query[] = ['user_id','=',$uid];
+        }
         $result = self::with(['customerMain', 'customerProject'])
             ->where($query)
             ->order('id', 'desc')

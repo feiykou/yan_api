@@ -10,6 +10,7 @@ use app\api\model\Customer;
 use app\api\model\CustomerLog;
 use app\api\service\token\LoginToken;
 use app\lib\exception\excel_customer\ExcelCustomerException;
+use LinCmsTp5\admin\model\LinUser;
 use LinCmsTp5\exception\BaseException;
 use think\Db;
 use think\Exception;
@@ -74,6 +75,7 @@ class ExcelCustomer extends Base
 //                'msg' => $e->getMessage()
 //            ]);
 //        }
+
         $params = Request::get('params');
         if(!isset($params) || !$params) {
             $params = [];
@@ -81,8 +83,13 @@ class ExcelCustomer extends Base
             $params = urldecode($params);
             $params = json_decode($params, true);
         }
+        $uid = -1;
+        if(isset($params['username']) && $params['username']) {
+            $uid = LinUser::where('username', $params['username'])->value('id');
+        }
         // 导出数据
-        $data = Customer::getCustomerAndProject($params)->toArray();
+        $data = Customer::getCustomerAndProject($uid, $params)->toArray();
+
         $result = $this->exportCustomerExcelInfo($data);
         if(!$result) {
             return writeJson(201, [], '导入失败');
@@ -200,7 +207,6 @@ class ExcelCustomer extends Base
 
     /**
      * 导出全部日志数据
-     * @auth('导出全部日志','客户日志管理')
      * @return \think\response\Json
      */
     public function exportAllCustomerLog() {
@@ -223,14 +229,20 @@ class ExcelCustomer extends Base
     public function exportCustomerLog() {
         // 导出数据
         $params = Request::get('params');
+
         if(!isset($params) || !$params) {
             $params = [];
         } else {
             $params = urldecode($params);
             $params = json_decode($params, true);
         }
-        $token = LoginToken::getInstance();
-        $uid = $token->getCurrentUid();
+
+        $uid = -1;
+        if(isset($params['name']) && $params['name']) {
+            $uid = LinUser::where('username', $params['name'])->value('id');
+        }
+//        $token = LoginToken::getInstance();
+//        $uid = $token->getCurrentUid();
         $data = CustomerLog::getCustomerLogAndCustomer($uid,$params)->toArray();
         return $this->exportCommonCustomerLog($data);
     }
