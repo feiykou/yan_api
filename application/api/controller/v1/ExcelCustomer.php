@@ -49,7 +49,6 @@ class ExcelCustomer extends Base
             var_dump($e);
             Db::rollback();
         }
-        var_dump(111);
         return writeJson(201, [], '导入失败');
     }
 
