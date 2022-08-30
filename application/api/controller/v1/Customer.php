@@ -481,6 +481,7 @@ class Customer extends Base
 
     /**
      * 恢复客户信息
+     * @auth('恢复客户信息','客户管理')
      * @param('id','客户id','require')
      */
     public function recycleCustomer($id) {

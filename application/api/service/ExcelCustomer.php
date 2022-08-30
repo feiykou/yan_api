@@ -152,6 +152,8 @@ class ExcelCustomer
                     throw new Exception('成交时间格式错误');
                 }
                 $followData[$key]['status_success_time'] = $datum['O'];
+            } else {
+                $followData[$key]['status_success_time'] = null;
             }
             // 客户咨询/客户描述
             $followData[$key]['demand_desc'] = $datum['P'];
@@ -192,7 +194,6 @@ class ExcelCustomer
             $followData[$key]['customer_name'] = $datum['K'];
             // 项目来源  判断项目来源
             $followData[$key]['project_channel'] = $datum['AF'];
-
 
             // 主客户信息
             // 连接编码

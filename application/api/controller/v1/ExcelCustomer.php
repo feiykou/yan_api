@@ -88,7 +88,12 @@ class ExcelCustomer extends Base
         }
         // 导出数据
         $data = Customer::getCustomerAndProject($uid, $params)->toArray();
-
+        if(count($data) === 0) {
+//            return writeJson(201, [], '暂无数据可导出');
+            throw new ExcelCustomerException([
+                'msg' => '暂无数据可导出'
+            ]);
+        }
         $result = $this->exportCustomerExcelInfo($data);
         if(!$result) {
             return writeJson(201, [], '导入失败');

@@ -350,6 +350,8 @@ class Customer extends BaseModel
         if(empty($query)) $query = [];
         if($uid && $uid > 0) {
             $query[] = ['user_id','=',$uid];
+        } else {
+            $query[] = ['user_id','neq',0];
         }
         $result = self::with(['customerMain', 'customerProject'])
             ->where($query)
