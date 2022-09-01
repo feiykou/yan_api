@@ -113,9 +113,59 @@ class ExcelCustomer
             $datum['G'] = preg_replace('/\s+/u', '', $datum['G']);
             if($datum['F']) {
                 if( !$datum['G'] ) $datum['G'] = '';
-                if(!strpos($datum['F'], '省')) $datum['F'] .= '省';
-                if(!strpos($datum['G'], '市')) $datum['G'] .= '市';
+                $singleArea = ['重庆', '北京', '天津', '上海'];
+                $aloneArea = ['香港', '澳门'];
+                $selfArea = ['内蒙古','西藏'];
+                $areaMark = false;
+                foreach ($singleArea as $val) {
+                    if(strstr($datum['F'],$val)) {
+                        $areaMark = true;
+                        $datum['F'] = $val . '市';
+                        $datum['G'] = '市辖区';
+                    }
+                }
+                foreach ($aloneArea as $aval) {
+                    if(strstr($datum['F'],$aval) && !strstr($val, '特别行政区')) {
+                        $areaMark = true;
+                        $datum['F'] = $val . '特别行政区';
+                        $datum['G'] = '';
+                    }
+                }
+                if(strstr($datum['F'],'广西')){
+                    $areaMark = true;
+                    $datum['F'] = '广西壮族自治区';
+                    $datum['G'] = '';
+                }
+                if(strstr($datum['F'],'宁夏')){
+                    $areaMark = true;
+                    $datum['F'] = '宁夏回族自治区';
+                    $datum['G'] = '';
+                }
+                if(strstr($datum['F'],'新疆')){
+                    $areaMark = true;
+                    $datum['F'] = '新疆维吾尔自治区';
+                    $datum['G'] = '';
+                }
+                foreach ($selfArea as $sval) {
+                    if(strstr($datum['F'],$sval)) {
+                        $areaMark = true;
+                        $datum['F'] = $val . '自治区';
+                        $datum['G'] = '';
+                    }
+                }
+                if(strstr($datum['F'],'台湾')) {
+                    $areaMark = true;
+                    $datum['F'] = '台湾省';
+                    $datum['G'] = '';
+                }
+                if(!$areaMark) {
+                    if(!strpos($datum['F'], '省')) $datum['F'] .= '省';
+                    if(!strpos($datum['G'], '市')) $datum['G'] .= '市';
+                }
                 $insertData[$key]['address'] = ['province' => $datum['F'], 'city' => $datum['G']];
+            }
+            if(empty($datum['F'])) {
+                $insertData[$key]['address'] = [];
             }
 //            $insertData[$key]['address'] = json([$datum['F'],$datum['G']]);
             // 联系人
@@ -127,7 +177,6 @@ class ExcelCustomer
             // 客户名称
             $insertData[$key]['name'] = $datum['K'];
 //            $insertData[$key]['purpose'] = $datum['E'];
-
             // 项目跟进
             // 连接编码
             $followData[$key]['link_code'] = $linkIndex;
