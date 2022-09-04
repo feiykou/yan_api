@@ -319,9 +319,27 @@ class Customer extends BaseModel
     /**
      * 总客户数 统计
      */
-    public static function totalCustomerNum()
+    public static function totalCustomerNum($params, $format)
     {
-        $titalNum = self::field("count(*) as count")->select();
+        $query = [];
+        $query[] = self::betweenTimeQuery('start', 'end', $params);
+        $titalNum = self::where($query)
+            ->field("DATE_FORMAT(create_time,'{$format}') as date,count(*) as count")
+            ->group('date')
+            ->select();
+        return $titalNum;
+    }
+
+    /**
+     * 公域池 统计
+     */
+    public static function publicCustomerNum()
+    {
+        $titalNum = self::where(['user_id'=> 0])
+            ->field("count(*) as count")
+            ->group('user_id')
+            ->select();
+        return $titalNum;
     }
 
     /**

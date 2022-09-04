@@ -219,6 +219,10 @@ Route::group('', function () {
             Route::get('customer/no_follow', 'api/v1.Statistics/getCustomerNoFollow');
             // 跟进客户数统计
             Route::get('customer/follow', 'api/v1.Statistics/getCustomerFollowByDate');
+            // 首页统计
+            Route::get('customer/index', 'api/v1.Statistics/getIndexData');
+            // 公域池客户总量
+            Route::get('customer/public_customer', 'api/v1.Statistics/getPublicCustomers');
 
 
         });

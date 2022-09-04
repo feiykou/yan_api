@@ -160,7 +160,11 @@ class ExcelCustomer
                 }
                 if(!$areaMark) {
                     if(!strpos($datum['F'], '省')) $datum['F'] .= '省';
-                    if(!strpos($datum['G'], '市')) $datum['G'] .= '市';
+                    if(!$datum['G']) {
+                        $datum['G'] = '全部';
+                    } else {
+                        if(!strpos($datum['G'], '市')) $datum['G'] .= '市';
+                    }
                 }
                 $insertData[$key]['address'] = ['province' => $datum['F'], 'city' => $datum['G']];
             }

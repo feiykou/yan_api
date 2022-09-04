@@ -5,6 +5,7 @@ namespace app\api\controller\v1;
 
 
 use app\api\controller\Base;
+use app\api\model\Customer;
 use think\facade\Request;
 use app\api\service\Statistics as StatisticsService;
 
@@ -68,6 +69,21 @@ class Statistics extends Base
      */
     public function getIndexData()
     {
+        $params=[];
+        $params['start'] = date('Y-m-d',strtotime("15 October 1980", time()));
+        $params['end'] = date('Y-m-d',strtotime("0 day", time()));
+        $result = StatisticsService::getTotalCustomers($params);
+        return $result;
+    }
+
+    /**
+     * 公域池客户数量
+     * @return mixed
+     */
+    public function getPublicCustomers()
+    {
+        $result = StatisticsService::getPublicCustomers();
+        return $result;
     }
 
 

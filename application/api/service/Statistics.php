@@ -42,6 +42,50 @@ class Statistics
         return $result;
     }
 
+    public static function getTotalCustomers($params) {
+        $format = self::handleType('day');
+        $statisticRes = CustomerModel::totalCustomerNum($params, $format['mysql']);
+        // 获取总客户数
+        $totalNum = 0;
+        // 最近一个月
+        $recentMonth = strtotime("-60 day", time());
+//        var_dump(date('Y-m-d',$recentMonth));
+        // 超过3天
+        $thanThreeMonth = strtotime("-3 day", time());
+        $thanThreeNum = 0;
+        $recentOneMonth = 0;
+        foreach ($statisticRes as $item) {
+            $totalNum += $item['count'];
+            $dateNum = strtotime($item['date']);
+            if($dateNum >= $recentMonth) {
+                $recentOneMonth+= $item['count'];
+            }
+            if($dateNum < $thanThreeMonth) {
+                $thanThreeNum += $item['count'];
+            }
+        }
+        return [
+            "totalNum" => $totalNum,
+            "recentMonthNum" => $recentOneMonth,
+            "thanThreeNum" => $thanThreeNum
+        ];
+    }
+
+    /**
+     * 公域池客户总量
+     */
+    public static function getPublicCustomers()
+    {
+        $result = CustomerModel::publicCustomerNum();
+        $data = $result->toArray();
+        if($data && count($data) > 0) {
+            $data = $data[0];
+        } else {
+            $data = ['count' => 0];
+        }
+        return $data;
+    }
+
     public static function getCustomerChannelData()
     {
         $statisticRes = CustomerModel::getCustomerChannelByDate();

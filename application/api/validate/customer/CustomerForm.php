@@ -9,7 +9,7 @@ use LinCmsTp5\validate\BaseValidate;
 class CustomerForm extends BaseValidate
 {
     protected $rule = [
-        'name' => 'require',
+//        'name' => 'require',
         'contacts_name' => 'require',
         'telephone' => 'unique:customer',
         'email' => 'email',
