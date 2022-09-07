@@ -40,7 +40,7 @@ class CustomerLog extends Base
     /**
      * 获取全部客户日志信息
      * @param customer_id  客户id
-     * @auth('获取客户日志列表','客户日志管理')
+     * @auth('获取全部客户日志列表','客户日志管理')
      */
     public function getAllCustomerLogs() {
         $params = Request::get();

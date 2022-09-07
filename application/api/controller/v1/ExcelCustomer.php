@@ -233,7 +233,6 @@ class ExcelCustomer extends Base
     public function exportCustomerLog() {
         // 导出数据
         $params = Request::get('params');
-
         if(!isset($params) || !$params) {
             $params = [];
         } else {
