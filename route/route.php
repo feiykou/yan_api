@@ -112,6 +112,7 @@ Route::group('', function () {
             Route::get('', 'api/v1.CustomerLog/getCustomerLogs');
             // 查询所有客户日志
             Route::get('all', 'api/v1.CustomerLog/getAllCustomerLogs');
+            Route::get('all_by_customer', 'api/v1.CustomerLog/getCustomerLogsByCustomer');
             // 新建客户日志
             Route::post('', 'api/v1.CustomerLog/create');
             // 查询指定id的客户日志,并获取审核权限

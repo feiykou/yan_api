@@ -49,6 +49,16 @@ class CustomerLog extends Base
     }
 
     /**
+     * 通过客户列表进入，则获取全部日志
+     * @return array
+     */
+    public function getCustomerLogsByCustomer() {
+        $params = Request::get();
+        $result = CustomerLogModel::getPaginate(-1,$params);
+        return $result;
+    }
+
+    /**
      * 获取当前管理员的客户日志信息
      * @return array
      */
