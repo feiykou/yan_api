@@ -260,6 +260,7 @@ class Customer extends BaseModel
             Db::commit();
             return $result;
         } catch (Exception $e) {
+            var_dump($e);
             Db::rollback();
             return false;
         }

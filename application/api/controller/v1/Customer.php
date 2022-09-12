@@ -281,8 +281,8 @@ class Customer extends Base
      */
     public function setGetCommonCustomer($cutomer_id)
     {
-        $params = $this->setAuthor();
-        // 释放客户回归正常状态
+        $params = $this->setAuthor([], 'add');
+        // 释放客户回归正常状态  0:不释放  1：释放
         $params['is_release_user'] = 0;
         $result = customerModel::updateUserIDAndProject($cutomer_id, $params);
         if (!$result) {
