@@ -150,7 +150,7 @@ class ExcelCustomer
             'A' => "status",
             'B' => "author",
             'C' => "channel",
-            'D' => "customer_user_code",
+            'D' => "customer_id",
             'E' => "customer_name",
             'F' => "address_1",  // 1：省份
             'G' => "address_0",  // 0：城市

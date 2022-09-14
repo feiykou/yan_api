@@ -86,7 +86,7 @@ class CustomerLog extends BaseModel
      */
     public static function getPaginate($uid=0, $params=[],$status=0)
     {
-        $field = ['status', 'author'];
+        $field = ['status', 'author', 'customer_id'];
         $query = self::equalQuery($field, $params);
         $query[] = self::betweenTimeQuery('start', 'end', $params,'update_time');
         if(!empty($query)) {
@@ -167,7 +167,7 @@ class CustomerLog extends BaseModel
      */
     public static function getCustomerLogAndCustomer($uid=0,$params=[])
     {
-        $field = ['status', 'author'];
+        $field = ['status', 'author', 'customer_id'];
         $query = self::equalQuery($field, $params);
         $query[] = self::betweenTimeQuery('start', 'end', $params,'update_time');
         if(!empty($query)) {
@@ -181,7 +181,7 @@ class CustomerLog extends BaseModel
         if($uid && $uid > 0) {
             $query[] = ['user_id','=',$uid];
         }
-        if(isset($params['user_code']) && !empty($params['user_code'])) $query[] = ['user_code', '=', $params['user_code']];
+//        if(isset($params['user_code']) && !empty($params['user_code'])) $query[] = ['user_code', '=', $params['user_code']];
         $result = self::with(['customer', 'customerProject'])
             ->where($query)
             ->order('id', 'desc')

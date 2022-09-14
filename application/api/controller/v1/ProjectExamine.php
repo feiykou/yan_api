@@ -106,7 +106,7 @@ class ProjectExamine
     /**
      * @validate('CustomerProjectExamineModelForm.edit')
      * @return \think\response\Json
-     * @auth('审核项目权限','客户项目管理')
+     * @auth('审核项目','客户项目管理')
      */
     public function update()
     {
