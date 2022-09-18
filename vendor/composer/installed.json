@@ -121,6 +121,58 @@
             "install-path": "../doctrine/instantiator"
         },
         {
+            "name": "easy-task/easy-task",
+            "version": "V2.4.5",
+            "version_normalized": "2.4.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thinker-gao/easy-task.git",
+                "reference": "3b5245ebee8624cdaa0b609547e9cbc01dffbd0b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thinker-gao/easy-task/zipball/3b5245ebee8624cdaa0b609547e9cbc01dffbd0b",
+                "reference": "3b5245ebee8624cdaa0b609547e9cbc01dffbd0b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": ">=5.4"
+            },
+            "suggest": {
+                "ext-event": "For better performance. "
+            },
+            "time": "2022-07-31T08:10:56+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "EasyTask\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "GaoJiuFeng",
+                    "email": "392223903@qq.com"
+                }
+            ],
+            "description": "easy-task, simple timer, timing task",
+            "keywords": [
+                "easy-task"
+            ],
+            "support": {
+                "issues": "https://github.com/thinker-gao/easy-task/issues",
+                "source": "https://github.com/thinker-gao/easy-task/tree/v1.0"
+            },
+            "install-path": "../easy-task/easy-task"
+        },
+        {
             "name": "ezyang/htmlpurifier",
             "version": "v4.13.0",
             "version_normalized": "4.13.0.0",

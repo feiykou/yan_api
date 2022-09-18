@@ -15,11 +15,11 @@ class ComposerStaticInit4f930fdd5645d95963d1685a369c0dff
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         'f67964341ef83e59f1cc6a3916599312' => __DIR__ . '/..' . '/qcloud/cos-sdk-v5/src/Qcloud/Cos/Common.php',
         '841780ea2e1d6545ea3a253239d59c05' => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu/functions.php',
-        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         'ddc3cd2a04224f9638c5d0de6a69c7e3' => __DIR__ . '/..' . '/topthink/think-migration/src/config.php',
     );
 
@@ -98,6 +98,10 @@ class ComposerStaticInit4f930fdd5645d95963d1685a369c0dff
         'F' => 
         array (
             'Firebase\\JWT\\' => 13,
+        ),
+        'E' => 
+        array (
+            'EasyTask\\' => 9,
         ),
         'D' => 
         array (
@@ -179,8 +183,8 @@ class ComposerStaticInit4f930fdd5645d95963d1685a369c0dff
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -246,6 +250,10 @@ class ComposerStaticInit4f930fdd5645d95963d1685a369c0dff
         'Firebase\\JWT\\' => 
         array (
             0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
+        ),
+        'EasyTask\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/easy-task/easy-task/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (

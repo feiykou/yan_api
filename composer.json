@@ -24,7 +24,8 @@
     "lin-cms-tp/validate-core": "dev-master",
     "lin-cms-tp/utils-core": "dev-master",
     "qinchen/web-utils": ">=0.0.1",
-    "phpoffice/phpspreadsheet": "^1.19"
+    "phpoffice/phpspreadsheet": "^1.19",
+    "easy-task/easy-task": "^2.4"
   },
   "autoload": {
     "psr-4": {
@@ -35,7 +36,10 @@
     "think-path": "thinkphp"
   },
   "config": {
-    "preferred-install": "dist"
+    "preferred-install": "dist",
+    "allow-plugins": {
+      "topthink/think-installer": true
+    }
   },
   "repositories": {
   }

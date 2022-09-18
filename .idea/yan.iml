@@ -67,6 +67,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/topthink/think-migration" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/wangyu/reflex-core" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/easy-task/easy-task" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -22,7 +22,7 @@ class ExcelCustomer
             'A' => "follow_status",
             'B' => "create_time",
             'C' => "author",
-            'D' => "user_code",
+            'D' => "id",
             'E' => "channel",
             'F' => "province",
             'G' => "city",

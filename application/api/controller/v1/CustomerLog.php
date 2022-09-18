@@ -140,7 +140,6 @@ class CustomerLog extends Base
         return writeJson(201, [], '更新成功');
     }
 
-
     /**
      * 删除信息
      * @param('ids','待删除的customer_log_id列表','require|array|min:1')

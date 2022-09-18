@@ -502,4 +502,16 @@ class Customer extends Base
         return writeJson(201, [], '恢复Customer成功');
     }
 
+    public function autoClearCustomerToPublic() {
+        $start = date('Y-m-d',strtotime("-16 day", time()));
+        $result = Db::query("update customer c1, customer c2 
+                        set c1.old_author = c2.author, c1.old_user_id = c2.user_id,
+                            c2.author = '', c2.user_id = 0
+                        where update_time < ".$start);
+
+
+
+
+    }
+
 }
