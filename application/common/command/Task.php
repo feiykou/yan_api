@@ -27,7 +27,7 @@ class Task extends Command
         $task = new \EasyTask\Task();
         $task->setPrefix('yanTask');
         $task->setRunTimePath('./runtime/');
-        $task->addClass('\app\api\controller\v1\Customer', 'autoClearCustomerToPublic', 'customerPublic', 10, 1);
+        $task->addClass('\app\api\controller\v1\Customer', 'autoClearCustomerToPublic', 'customerPublic', 1, 1);
 
         // 根据命令执行
         if ($action == 'start'){

@@ -502,16 +502,24 @@ class Customer extends Base
         return writeJson(201, [], '恢复Customer成功');
     }
 
+    /**
+     * 定时清理客户信息，到公域池
+     */
     public function autoClearCustomerToPublic() {
-        $start = date('Y-m-d',strtotime("-16 day", time()));
-        $result = Db::query("update customer c1, customer c2 
-                        set c1.old_author = c2.author, c1.old_user_id = c2.user_id,
-                            c2.author = '', c2.user_id = 0
-                        where update_time < ".$start);
-
-
-
-
+        $hour = date('H');
+        var_dump($hour);
+        if($hour != 12) {
+            return;
+        }
+        $start = date('Y-m-d',strtotime("-1 day", time()));
+        $result = Db::execute("update customer
+            set old_user_id=user_id, old_author=author, user_id=0, author='', is_release_user=1
+            where update_time < :update_time", ["update_time" => $start]);
+        if(!$result) {
+            var_dump('定时失败');
+            return;
+        }
+        var_dump('定时成功');
     }
 
 }
