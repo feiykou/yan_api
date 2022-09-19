@@ -108,10 +108,12 @@ class Customer extends BaseModel
             if($uid && $uid > 0) {
                 $query[] = ['user_id','=',$uid];
             } else {
+                // 获取全部的客户信息，包含公域池的
                 if($uid == -1) {
                     // 释放的客户
-                    $query[] = ['user_id','<>',0];
+//                    $query[] = ['user_id','<>',0];
                 } else {
+                    // 公域池客户信息
                     $query[] = ['user_id','=',0];
                 }
             }
@@ -369,7 +371,10 @@ class Customer extends BaseModel
         if(empty($query)) $query = [];
         if($uid && $uid > 0) {
             $query[] = ['user_id','=',$uid];
+        } else if($uid == 0) {
+            $query[] = ['user_id','=',0];
         } else {
+            // 默认
             $query[] = ['user_id','neq',0];
         }
         $result = self::with(['customerMain', 'customerProject'])

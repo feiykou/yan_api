@@ -137,7 +137,7 @@ class Customer extends Base
     public function create()
     {
         // 检测公司客户是否超过20个
-        $this->isAddCustomer();
+//        $this->isAddCustomer();
         $params = Request::post();
         $params = $this->setAuthor($params, 'add');
         $token = LoginToken::getInstance();

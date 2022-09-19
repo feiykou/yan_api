@@ -86,6 +86,7 @@ class ExcelCustomer extends Base
         if(isset($params['username']) && $params['username']) {
             $uid = LinUser::where('username', $params['username'])->value('id');
         }
+        if($params['user_id'] == 0) $uid = 0;
         // 导出数据
         $data = Customer::getCustomerAndProject($uid, $params)->toArray();
         if(count($data) === 0) {
