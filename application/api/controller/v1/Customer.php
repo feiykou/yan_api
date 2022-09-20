@@ -66,7 +66,15 @@ class Customer extends Base
      */
     public function getPublicCustomers()
     {
-        $result = CustomerModel::getCustomerPaginate(0);
+        $query = [];
+        $params = Request::get();
+        // self == 0 代表获取自己的客户信息
+        if($params['self'] == 0) {
+            $token = LoginToken::getInstance();
+            $uid = $token->getCurrentUid();
+            $query['old_user_id'] = $uid;
+        }
+        $result = CustomerModel::getCustomerPaginate(0,$query);
         return $result;
     }
 

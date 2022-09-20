@@ -69,7 +69,7 @@ class Customer extends BaseModel
      */
     public static function getCustomerPaginate($uid='',$params=[])
     {
-        $field = ['name', 'follow_status', 'id', 'author', 'contacts_name', 'telephone'];
+        $field = ['name', 'follow_status', 'id', 'author', 'contacts_name', 'telephone', 'old_user_id'];
         $query = self::equalQuery($field, $params);
         $query[] = self::betweenTimeQuery('start', 'end', $params, 'update_time');
         $whereJSON = [];
