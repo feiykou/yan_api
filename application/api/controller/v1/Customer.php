@@ -514,12 +514,12 @@ class Customer extends Base
      * 定时清理客户信息，到公域池
      */
     public function autoClearCustomerToPublic() {
-        $hour = date('H');
+        $hour = date('H:i:s');
         var_dump($hour);
-        if($hour != 23) {
+        if($hour != '23:46:00') {
             return;
         }
-        $start = date('Y-m-d',strtotime("-1 day", time()));
+        $start = date('Y-m-d',strtotime("-16 day", time()));
         $result = Db::execute("update customer
             set old_user_id=user_id, old_author=author, user_id=0, author='', is_release_user=1
             where update_time < :update_time", ["update_time" => $start]);

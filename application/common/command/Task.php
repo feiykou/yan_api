@@ -28,17 +28,17 @@ class Task extends Command
         $task->setPrefix('yanTask');
         $task->setRunTimePath('./runtime/');
         $task->addClass('\app\api\controller\v1\Customer', 'autoClearCustomerToPublic', 'customerPublic', 1, 1);
-
-        // 根据命令执行
-        if ($action == 'start'){
-            $task->start();
-        } elseif ($action == 'status') {
-            $task->status();
-        } elseif ($action == 'stop') {
-            $force = ($force == 'force'); //是否强制停止
-            $task->stop($force);
-        } else {
-            exit('Command is not exist');
-        }
+        $task->start();
+//        // 根据命令执行
+//        if ($action == 'start'){
+//            $task->start();
+//        } elseif ($action == 'status') {
+//            $task->status();
+//        } elseif ($action == 'stop') {
+//            $force = ($force == 'force'); //是否强制停止
+//            $task->stop($force);
+//        } else {
+//            exit('Command is not exist');
+//        }
     }
 }
