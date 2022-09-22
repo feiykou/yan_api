@@ -516,7 +516,7 @@ class Customer extends Base
     public function autoClearCustomerToPublic() {
         $hour = date('H');
         var_dump($hour);
-        if($hour != 12) {
+        if($hour != 23) {
             return;
         }
         $start = date('Y-m-d',strtotime("-1 day", time()));
