@@ -358,7 +358,7 @@ class Customer extends Base
             $params['author'] = '';
             $params['user_id'] = 0;
         } else {
-            if($token->getCurrentUserName() !== 'super') {
+            if($token->getCurrentUserName() !== 'super' && $type == 'add') {
                 // 设置当前写入客户的id
                 $params['author'] = $token->getCurrentUserName();
                 $params['user_id'] = $token->getCurrentUID();

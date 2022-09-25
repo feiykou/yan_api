@@ -178,6 +178,9 @@ class Customer extends BaseModel
         // 获取3天前时间
         $startTime = date('Y-m-d');
         $startTime = strtotime($startTime);
+
+
+
         $noFollowTime = date('Y-m-d',strtotime("-3 day", $startTime));
         $query = [];
         $query[] = ['follow_time', '<', $noFollowTime];

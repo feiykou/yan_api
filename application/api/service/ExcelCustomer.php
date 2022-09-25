@@ -125,9 +125,9 @@ class ExcelCustomer
                     }
                 }
                 foreach ($aloneArea as $aval) {
-                    if(strstr($datum['F'],$aval) && !strstr($val, '特别行政区')) {
+                    if(strstr($datum['F'],$aval) && !strstr($aval, '特别行政区')) {
                         $areaMark = true;
-                        $datum['F'] = $val . '特别行政区';
+                        $datum['F'] = $aval . '特别行政区';
                         $datum['G'] = '';
                     }
                 }
@@ -149,7 +149,7 @@ class ExcelCustomer
                 foreach ($selfArea as $sval) {
                     if(strstr($datum['F'],$sval)) {
                         $areaMark = true;
-                        $datum['F'] = $val . '自治区';
+                        $datum['F'] = $sval . '自治区';
                         $datum['G'] = '';
                     }
                 }
@@ -483,10 +483,11 @@ class ExcelCustomer
         $obj = $objRead->load($file);
         // 获取指定的sheet表
         $currSheet = $obj->getSheet(0);
-        /* 取得最大的列号 */
-        $columnH = $currSheet->getHighestColumn();
+        /* 取得最大的列号  暂时删除  手动限制列*/
+//        $columnH = $currSheet->getHighestColumn();
+
         /* 兼容原逻辑，循环时使用的是小于等于 */
-        $columnCnt = Coordinate::columnIndexFromString($columnH);
+        $columnCnt = Coordinate::columnIndexFromString('AT');
         /* 获取总行数 */
         $rowCnt = $currSheet->getHighestRow();
         $data   = [];
