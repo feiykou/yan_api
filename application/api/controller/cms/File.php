@@ -33,7 +33,6 @@ class File
                 'msg' => '字段中含有非法字符',
             ]);
         }
-        var_dump(1111);
         $file = (new LocalUploader($request))->upload();
         return $file;
     }

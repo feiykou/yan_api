@@ -39,6 +39,7 @@ class LocalUploader extends File
             } else {
                 $size = $this->getSize($file);
                 $info = $file->move(Env::get('root_path') .'/'.'public' .'/'. $this->storeDir);
+                var_dump($info);
                 if ($info) {
                     $extension = '.' . $info->getExtension();
                     $path = str_replace('\\','/',$info->getSaveName());
