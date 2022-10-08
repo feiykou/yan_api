@@ -27,8 +27,6 @@ class File
         try {
             $request = Request::file();
         } catch (\Exception $e) {
-            var_dump($e);
-            var_dump(111);
             throw new FileException([
                 'msg' => '字段中含有非法字符',
             ]);
