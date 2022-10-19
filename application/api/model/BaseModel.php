@@ -63,6 +63,7 @@ class BaseModel extends Model
         if(empty($value) || !is_array($value)) {
             return;
         }
+
         foreach ($value as $k => &$v) {
             if(is_object($v)) $v = (array)$v;
             if(!is_array($v)) {
@@ -83,7 +84,7 @@ class BaseModel extends Model
             if(is_object($v)) $v = (array)$v;
             if(!is_array($v)) {
                 $v = $this->setImgPrefix($v, $host);
-            } else {
+            } else if(isset($v['path'])) {
                 $v['path'] = $this->setImgPrefix($v['path'], $host);
             }
         }
