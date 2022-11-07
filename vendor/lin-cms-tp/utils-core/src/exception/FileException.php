@@ -16,6 +16,7 @@ class FileException extends \Exception
         isset($params['code']) && $this->code = $params['code'];
         isset($params['message']) && $this->message = $params['message'];
         isset($params['error_code']) && $this->error_code = $params['error_code'];
+        var_dump($params);
         if(class_exists('\LinCmsTp5\exception\BaseException')){
             throw  new \LinCmsTp5\exception\BaseException([
                 'code' => $this->code,

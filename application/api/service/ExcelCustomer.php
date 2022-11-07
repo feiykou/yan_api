@@ -318,6 +318,7 @@ class ExcelCustomer
                 array_push($projectArr, $val['M']);
             }
         }
+
         $customerIDs = Customer::where('id', 'in', $customerArr)
             ->field(['user_code','id'])
             ->select()
@@ -326,9 +327,19 @@ class ExcelCustomer
             ->field(['customer_id','id'])
             ->select()
             ->toArray();
-
+        $customerArr = array_unique($customerArr);
         if(count($customerIDs) !== count($customerArr)) {
-            throw new Exception('存在客户编码错误的行，请及时检查后导入');
+            $str = [];
+            $dbIdArr = [];
+            foreach ($customerIDs as $idVal) {
+                array_push($dbIdArr, $idVal['id']);
+            }
+            foreach ($customerArr as $idVal) {
+                if(!in_array($idVal, $dbIdArr)) {
+                    array_push($str, $idVal);
+                }
+            }
+            throw new Exception('存在客户编码错误的行，请及时检查后导入。'.implode(';',$str));
         }
         // 项目
         if(count($customerProjectIDs) > 0) {
@@ -345,6 +356,20 @@ class ExcelCustomer
             }
         } else {
             throw new Exception('不存在客户编码，请填入客户编码');
+        }
+        $projectArr = array_unique($projectArr);
+        if(count($projectArr) !== count($customerProjectIDs)) {
+            $pstr = [];
+            $dbpIdArr = [];
+            foreach ($customerProjectIDs as $pidVal) {
+                array_push($dbpIdArr, $pidVal['id']);
+            }
+            foreach ($projectArr as $ppidVal) {
+                if(!in_array($ppidVal, $dbpIdArr)) {
+                    array_push($pstr, $ppidVal);
+                }
+            }
+            throw new Exception('存在项目不存在，请及时检查后导入'.implode(';',$pstr));
         }
         foreach ($data as $key => $datum) {
             // 项目编码
@@ -377,9 +402,7 @@ class ExcelCustomer
                 throw new Exception('客户编码填写有误，请检查');
             };
 
-            if(count($projectArr) !== count($customerProjectIDs)) {
-                throw new Exception('存在项目不存在，请及时检查后导入');
-            }
+
             // 判断项目
             if(!empty($datum['M'])) {
                 if(isset($customerProjectIDArr[$datum['M']]) && !empty($customerProjectIDArr[$datum['M']])) {

@@ -23,6 +23,8 @@ class CustomerLog extends BaseModel
     // 文件前缀
     protected function getFileUrlsAttr($value)
     {
+//        var_dump($value);
+//        return [];
         if(!$value) return;
         return $this->setMultiFilePrefix($value);
     }
